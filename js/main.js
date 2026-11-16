@@ -14,101 +14,108 @@
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* =======================================================
-     1. Sound (Web Audio, silent until the visitor asks)
+     1. Sound: only the blue landscape makes sound.
+        Everything runs through a distortion stage whose
+        drive follows the mouse over the panorama.
      ======================================================= */
   const Sound = {
-    ctx: null, on: false, master: null, analyser: null, drone: null,
-    scale: [110, 130.81, 146.83, 164.81, 196, 220, 261.63, 293.66, 329.63, 392, 440, 523.25, 587.33, 659.25],
+    ctx: null, on: false, input: null, drive: null, tone: null, analyser: null, drone: null,
+    scale: [55, 65.41, 73.42, 82.41, 98, 110, 130.81, 146.83, 164.81, 196, 220],
+
+    curve(amount) {
+      const n = 2048, c = new Float32Array(n);
+      for (let i = 0; i < n; i++) {
+        const x = (i * 2) / n - 1;
+        c[i] = ((1 + amount) * x) / (1 + amount * Math.abs(x)); // soft-clip
+      }
+      return c;
+    },
 
     init() {
       if (this.ctx) return true;
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return false;
       const c = (this.ctx = new AC());
-      this.master = c.createGain(); this.master.gain.value = 0.25;
+
+      // input -> drive -> fuzz -> crunch -> tone -> out (+ dark echo)
+      this.input = c.createGain(); this.input.gain.value = 0.6;
+      this.drive = c.createGain(); this.drive.gain.value = 3;
+      const fuzz = c.createWaveShaper(); fuzz.curve = this.curve(60); fuzz.oversample = "4x";
+      const crunch = c.createWaveShaper(); crunch.curve = this.curve(8);
+      this.tone = c.createBiquadFilter(); this.tone.type = "lowpass"; this.tone.frequency.value = 1400; this.tone.Q.value = 6;
+      const out = c.createGain(); out.gain.value = 0.16;
       this.analyser = c.createAnalyser(); this.analyser.fftSize = 512;
-      const delay = c.createDelay(2); delay.delayTime.value = 0.42;
-      const fb = c.createGain(); fb.gain.value = 0.42;
-      const lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1800;
-      this.master.connect(this.analyser).connect(c.destination);
-      this.master.connect(delay); delay.connect(lp); lp.connect(fb); fb.connect(delay); lp.connect(this.analyser);
+
+      const delay = c.createDelay(2); delay.delayTime.value = 0.33;
+      const fb = c.createGain(); fb.gain.value = 0.48;
+      const dark = c.createBiquadFilter(); dark.type = "lowpass"; dark.frequency.value = 900;
+
+      this.input.connect(this.drive).connect(fuzz).connect(crunch).connect(this.tone).connect(out);
+      out.connect(this.analyser).connect(c.destination);
+      out.connect(delay); delay.connect(dark); dark.connect(fb); fb.connect(delay); dark.connect(this.analyser);
       return true;
     },
 
-    set(on) {
+    start() {
       if (!this.init()) return false;
-      this.on = on;
-      if (on && this.ctx.state === "suspended") this.ctx.resume();
-      if (!on) this.stopDrone();
-      return on;
+      this.on = true;
+      if (this.ctx.state === "suspended") this.ctx.resume();
+      return true;
     },
 
-    tone(freq, { gain = 0.4, dur = 2.4, type = "sine", partials = [[1, 1], [2.01, 0.25], [3, 0.08]], delay = 0 } = {}) {
-      if (!this.on) return;
-      const c = this.ctx, t = c.currentTime + delay;
-      const env = c.createGain();
-      env.gain.setValueAtTime(0, t);
-      env.gain.linearRampToValueAtTime(gain, t + 0.01);
-      env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      env.connect(this.master);
-      partials.forEach(([m, l]) => {
-        const o = c.createOscillator(), g = c.createGain();
-        o.type = type; o.frequency.value = freq * m; g.gain.value = l;
-        o.connect(g).connect(env); o.start(t); o.stop(t + dur + 0.1);
-      });
+    // mouse over the landscape bends the sound: x opens the filter, speed adds drive
+    shape(x01, energy) {
+      if (!this.ctx) return;
+      const t = this.ctx.currentTime;
+      this.tone.frequency.setTargetAtTime(250 + x01 * x01 * 4200, t, 0.08);
+      this.drive.gain.setTargetAtTime(2 + energy * 40, t, 0.06);
     },
 
-    noise({ gain = 0.2, dur = 1.2, freq = 1200, q = 0.8 } = {}) {
+    hit(freq) {
       if (!this.on) return;
       const c = this.ctx, t = c.currentTime;
-      const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-      const src = c.createBufferSource(); src.buffer = buf;
-      const bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = freq; bp.Q.value = q;
       const env = c.createGain();
-      env.gain.setValueAtTime(0, t); env.gain.linearRampToValueAtTime(gain, t + 0.02);
-      env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      src.connect(bp).connect(env).connect(this.master); src.start(t);
+      env.gain.setValueAtTime(0, t);
+      env.gain.linearRampToValueAtTime(0.9, t + 0.005);
+      env.gain.exponentialRampToValueAtTime(0.0001, t + 2.8);
+      env.connect(this.input);
+      [[1, "sawtooth", 0], [1.5, "square", 9], [0.5, "sawtooth", -7]].forEach(([m, type, det]) => {
+        const o = c.createOscillator();
+        o.type = type; o.frequency.setValueAtTime(freq * m * 1.04, t);
+        o.frequency.exponentialRampToValueAtTime(freq * m, t + 0.25); // pitch dive
+        o.detune.value = det; o.connect(env); o.start(t); o.stop(t + 3);
+      });
+      // crackle
+      const len = c.sampleRate * 0.25, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.15));
+      const n = c.createBufferSource(); n.buffer = buf;
+      const ng = c.createGain(); ng.gain.value = 0.5; n.connect(ng).connect(this.input); n.start(t);
     },
 
     note(i) { const s = this.scale; return s[((i % s.length) + s.length) % s.length]; },
 
-    // each kind of image has its own sound signature
-    signature(kind, seed = 0) {
-      const b = 5 + (seed % 5);
-      switch (kind) {
-        case "spectrogram": [1, 2, 3, 4, 5, 6].forEach((k, i) => this.tone(110 * k, { gain: 0.18 / Math.sqrt(k), delay: i * 0.09, dur: 2.8, partials: [[1, 1]] })); break;
-        case "chladni":     this.tone(this.note(b + 4), { gain: 0.35, dur: 4, partials: [[1, 1], [2.76, 0.4], [5.4, 0.2], [8.93, 0.1]] }); break;
-        case "waveform":    this.noise({ gain: 0.35, dur: 0.9, freq: 900 + seed % 7 * 200, q: 2 }); break;
-        case "lissajous":   this.tone(this.note(b), { gain: 0.25, dur: 3 }); this.tone(this.note(b) * 1.5, { gain: 0.2, dur: 3, delay: 0.02 }); break;
-        case "haze":        this.noise({ gain: 0.25, dur: 2.6, freq: 400, q: 0.5 }); this.tone(this.note(b - 3), { gain: 0.12, dur: 3 }); break;
-        default:            [0, 2, 4].forEach((n, i) => this.tone(this.note(b + n), { gain: 0.22, delay: i * 0.12 }));
-      }
-    },
-
     startDrone() {
       if (!this.on || this.drone) return;
       const c = this.ctx, t = c.currentTime;
-      const out = c.createGain(); out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(0.32, t + 3);
-      const lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 700; lp.Q.value = 3;
+      const g = c.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.5, t + 2.5);
       const lfo = c.createOscillator(), lfoG = c.createGain();
-      lfo.frequency.value = 0.07; lfoG.gain.value = 420; lfo.connect(lfoG).connect(lp.frequency); lfo.start();
-      const oscs = [55, 82.41, 110.3, 164.81, 220.6].map((f, i) => {
-        const o = c.createOscillator(), g = c.createGain();
-        o.type = i % 2 ? "triangle" : "sawtooth"; o.frequency.value = f; o.detune.value = (i - 2) * 4;
-        g.gain.value = 0.12 / (i + 1); o.connect(g).connect(lp); o.start(); return o;
+      lfo.frequency.value = 0.11; lfoG.gain.value = 18; lfo.connect(lfoG); lfo.start();
+      const oscs = [41.2, 55, 61.7, 82.4, 110.2].map((f, i) => {
+        const o = c.createOscillator(), og = c.createGain();
+        o.type = i % 2 ? "square" : "sawtooth"; o.frequency.value = f; o.detune.value = (i - 2) * 7;
+        lfoG.connect(o.detune);
+        og.gain.value = 0.3 / (i + 1); o.connect(og).connect(g); o.start(); return o;
       });
-      lp.connect(out).connect(this.master);
-      this.drone = { out, oscs, lfo };
+      g.connect(this.input);
+      this.drone = { g, oscs, lfo };
     },
 
     stopDrone() {
       if (!this.drone) return;
-      const { out, oscs, lfo } = this.drone, t = this.ctx.currentTime;
-      out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t);
-      out.gain.linearRampToValueAtTime(0, t + 1.5);
-      setTimeout(() => { oscs.forEach((o) => o.stop()); lfo.stop(); }, 1700);
+      const { g, oscs, lfo } = this.drone, t = this.ctx.currentTime;
+      g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t);
+      g.gain.linearRampToValueAtTime(0, t + 1.2);
+      setTimeout(() => { oscs.forEach((o) => o.stop()); lfo.stop(); }, 1400);
       this.drone = null;
     },
 
@@ -117,24 +124,18 @@
       const a = new Uint8Array(this.analyser.fftSize);
       this.analyser.getByteTimeDomainData(a);
       let s = 0; for (const v of a) s += ((v - 128) / 128) ** 2;
-      return Math.min(1, Math.sqrt(s / a.length) * 6);
+      return Math.min(1, Math.sqrt(s / a.length) * 4);
     }
   };
 
-  const soundBtn = $("#soundBtn"), listenBtn = $("#listenBtn");
-  function setSound(on) {
-    Sound.set(on);
-    soundBtn.textContent = on ? "Sound on" : "Sound off";
-    soundBtn.setAttribute("aria-pressed", String(on));
-    if (!on) { listenBtn.textContent = "+ Listen"; listenBtn.classList.remove("is-on"); }
-    if (on) [0, 2, 4, 7].forEach((n, i) => Sound.tone(Sound.note(n + 5), { gain: 0.18, delay: i * 0.12 }));
+  const listenBtn = $("#listenBtn");
+  function setListening(on) {
+    if (on) { Sound.start(); Sound.startDrone(); }
+    else Sound.stopDrone();
+    listenBtn.textContent = on ? "– Stop" : "+ Listen";
+    listenBtn.classList.toggle("is-on", on);
   }
-  soundBtn.addEventListener("click", () => setSound(!Sound.on));
-  listenBtn.addEventListener("click", () => {
-    if (!Sound.on) setSound(true);
-    if (Sound.drone) { Sound.stopDrone(); listenBtn.textContent = "+ Listen"; listenBtn.classList.remove("is-on"); }
-    else { Sound.startDrone(); listenBtn.textContent = "– Stop"; listenBtn.classList.add("is-on"); }
-  });
+  listenBtn.addEventListener("click", () => setListening(!Sound.drone));
 
   /* =======================================================
      2. Content: real items first, generated placeholders after
@@ -192,12 +193,8 @@
         <figcaption class="tile__cap">
           <span>${esc(item.title)}, ${esc(item.year ?? "")}</span>
           <span class="muted">${esc(item.location ?? "")}</span>
-          <span class="plus"><span class="link">+ Listen</span><span class="link">+ More</span></span>
+          <span class="plus"><span class="link">+ More</span></span>
         </figcaption>`;
-      tile.addEventListener("pointerenter", () => {
-        if (item.ghost) Sound.signature(item.kind, item.seed);
-        else Sound.tone(Sound.note(i + 4), { gain: 0.25 });
-      });
       tile.addEventListener("click", () => {
         location.hash = item.ghost ? "#archive" : `#item/${item.section}/${item.index}`;
       });
@@ -218,7 +215,6 @@
     [...thumbs, ...thumbs].forEach((t) => {
       const img = new Image();
       img.src = t.image; img.alt = "";
-      img.addEventListener("pointerenter", () => t.ghost ? Sound.signature(t.kind, t.seed) : Sound.tone(Sound.note(3), { gain: 0.2 }));
       img.addEventListener("click", () => { location.hash = t.ghost ? "#archive" : `#item/${t.section}/${t.index}`; });
       track.appendChild(img);
     });
@@ -245,14 +241,16 @@
     pm.tx = e.clientX - r.left;
     if (pm.x < 0) pm.x = pm.tx;
     pm.energy = Math.min(1, pm.energy + Math.abs(e.movementX || 0) * 0.01);
+    Sound.shape(pm.tx / r.width, pm.energy);
   });
   pano.addEventListener("pointerleave", () => { pm.tx = -1; });
   pano.addEventListener("pointerdown", (e) => {
     const r = pano.getBoundingClientRect();
     const idx = Math.floor(((e.clientX - r.left) / r.width) * 8) + 3;
-    Sound.tone(Sound.note(idx), { gain: 0.35, dur: 3.5 });
-    Sound.tone(Sound.note(idx + 2), { gain: 0.18, dur: 3.5, delay: 0.08 });
+    Sound.start();
+    Sound.hit(Sound.note(idx));
     pm.energy = 1;
+    Sound.shape((e.clientX - r.left) / r.width, 1);
   });
 
   function frame(time) {
@@ -274,8 +272,6 @@
   topNav.innerHTML = SITE.sections.map((s) => `<a href="#${s.id}">${esc(s.title)}</a>`).join("");
   drawer.innerHTML = SITE.sections.map((s) => `<a href="#${s.id}">${esc(s.title)}</a>`).join("") +
     `<a href="#archive">Archive</a>`;
-  [...topNav.children, ...drawer.children].forEach((a, i) =>
-    a.addEventListener("pointerenter", () => Sound.tone(Sound.note(i + 6), { gain: 0.14, dur: 1.4 })));
 
   function setDrawer(open) {
     drawer.classList.toggle("is-visible", open);
@@ -297,7 +293,7 @@
         <div class="card__img"><img src="${esc(it.image || Art.render(Art.KINDS[n % 10], 3000 + n, 480, 600))}" alt="${esc(it.title)}" loading="lazy"></div>
         <div class="card__t">${esc(it.title)}${it.year ? ", " + esc(it.year) : ""}</div>
         <div class="card__m">${esc(it.location || it.medium || "")}</div>
-        <div class="card__p"><span class="link">+ Listen</span><span class="link">+ More</span></div>
+        <div class="card__p"><span class="link">+ More</span></div>
       </a>`;
   }
 
@@ -326,8 +322,6 @@
     }
     const grid = $("#archiveGrid");
     grid.innerHTML = html;
-    grid.querySelectorAll(".card").forEach((c, n) =>
-      c.addEventListener("pointerenter", () => Sound.tone(Sound.note(n + 2), { gain: 0.12, dur: 1.6 })));
 
     archive.classList.add("is-visible");
     archive.setAttribute("aria-hidden", "false");
@@ -420,7 +414,7 @@
     try { sessionStorage.setItem("cv-hi", "1"); } catch (_) {}
   }
   $("#hiClose").addEventListener("click", closeHi);
-  $("#hiSound").addEventListener("click", () => { setSound(true); closeHi(); });
+  $("#hiSound").addEventListener("click", () => { setListening(true); closeHi(); });
   let seen = false;
   try { seen = sessionStorage.getItem("cv-hi") === "1"; } catch (_) {}
   if (SITE.greeting && !seen) {
