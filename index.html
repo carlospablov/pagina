@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carlos Villamizar — Sound Artist</title>
+  <meta name="description" content="Carlos Villamizar — sound artist and composer based in Berlin." />
+  <meta property="og:title" content="Carlos Villamizar — Sound Artist" />
+  <meta property="og:description" content="Sound art, composition and listening situations. Berlin." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== Top bar (Kim Song Ri: quiet grey uppercase) ===== -->
+  <header class="top">
+    <a href="#" class="top__name" data-home>Carlos Villamizar</a>
+    <nav class="top__nav" id="topNav" aria-label="Sections"></nav>
+    <button class="top__menu link" id="menuBtn" aria-expanded="false">+ Menu</button>
+  </header>
+
+  <!-- ===== Collage (Archive for Space: edge-to-edge, washed images) ===== -->
+  <div class="collage" id="collage" aria-hidden="true"></div>
+
+  <!-- ===== Thumbnail strip on the right edge ===== -->
+  <aside class="strip" id="strip" aria-hidden="true"></aside>
+
+  <!-- ===== The panorama: a landscape drawn by sound ===== -->
+  <main class="stage">
+    <figure class="pano" id="panoFig">
+      <canvas id="pano"></canvas>
+      <figcaption class="pano__cap">
+        <span class="pano__title" id="panoTitle"></span>
+        <span class="pano__meta" id="panoMeta"></span>
+        <span class="pano__actions">
+          <button class="link" id="listenBtn">+ Listen</button>
+          <a class="link" href="#works">+ More</a>
+        </span>
+      </figcaption>
+    </figure>
+  </main>
+
+  <!-- ===== Giant cropped mark, bottom-left ===== -->
+  <a href="#" class="mark" data-home aria-label="Carlos Villamizar, home">CV<sup>®</sup></a>
+
+  <!-- ===== Bottom-right nav ===== -->
+  <nav class="bottom" aria-label="Utilities">
+    <a href="#archive">Archive</a>
+    <button id="soundBtn" aria-pressed="false">Sound off</button>
+    <span id="clock">Berlin --:--</span>
+    <span>©<span id="year"></span></span>
+  </nav>
+
+  <!-- ===== "Hi!" box ===== -->
+  <div class="hi" id="hi" role="dialog" aria-labelledby="hiTitle" hidden>
+    <button class="hi__x" id="hiClose" aria-label="Close">X</button>
+    <p id="hiTitle">Hi!</p>
+    <p>This archive is still being tuned. Turn the sound on and play the page while you wait.</p>
+    <div class="hi__row">
+      <span class="hi__line">Move</span>
+      <span class="hi__line">Hover</span>
+      <span class="hi__line">Click</span>
+      <button class="pill" id="hiSound">+ Sound on</button>
+    </div>
+  </div>
+
+  <!-- ===== Mobile menu ===== -->
+  <nav class="drawer" id="drawer" aria-hidden="true"></nav>
+
+  <!-- ===== Archive overlay ===== -->
+  <section class="archive" id="archive" aria-hidden="true">
+    <header class="archive__head">
+      <h2 class="archive__title" id="archiveTitle">Archive</h2>
+      <span class="archive__count" id="archiveCount"></span>
+      <a href="#" class="archive__x" data-home aria-label="Close">X</a>
+    </header>
+    <div class="archive__tabs" id="archiveTabs"></div>
+    <div class="archive__filters" id="archiveFilters"></div>
+    <div class="archive__grid" id="archiveGrid"></div>
+  </section>
+
+  <!-- ===== Item detail ===== -->
+  <section class="detail" id="detail" aria-hidden="true">
+    <div class="detail__bar">
+      <button class="link" id="detailBack">&lt; Back</button>
+      <button class="link" id="detailClose">X</button>
+    </div>
+    <div class="detail__body" id="detailBody"></div>
+  </section>
+
+  <script src="js/data.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
