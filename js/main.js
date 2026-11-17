@@ -20,6 +20,7 @@
      ======================================================= */
   const Sound = {
     ctx: null, on: false, input: null, drive: null, tone: null, analyser: null, drone: null,
+    state: { f: 0, drive: 2, lp: 1400 },
     scale: [55, 65.41, 73.42, 82.41, 98, 110, 130.81, 146.83, 164.81, 196, 220],
 
     curve(amount) {
@@ -67,12 +68,15 @@
     shape(x01, energy) {
       if (!this.ctx) return;
       const t = this.ctx.currentTime;
-      this.tone.frequency.setTargetAtTime(250 + x01 * x01 * 4200, t, 0.08);
-      this.drive.gain.setTargetAtTime(2 + energy * 40, t, 0.06);
+      this.state.lp = 250 + x01 * x01 * 4200;
+      this.state.drive = 2 + energy * 40;
+      this.tone.frequency.setTargetAtTime(this.state.lp, t, 0.08);
+      this.drive.gain.setTargetAtTime(this.state.drive, t, 0.06);
     },
 
     hit(freq) {
       if (!this.on) return;
+      this.state.f = freq;
       const c = this.ctx, t = c.currentTime;
       const env = c.createGain();
       env.gain.setValueAtTime(0, t);
@@ -108,6 +112,7 @@
       });
       g.connect(this.input);
       this.drone = { g, oscs, lfo };
+      if (!this.state.f) this.state.f = 41.2;
     },
 
     stopDrone() {
@@ -190,6 +195,7 @@
       tile.style.cssText = `left:${L.x}%;top:${L.y}%;width:${L.w}%;height:${L.h}%;--veil:${L.veil};--i:${i}`;
       tile.innerHTML = `
         <img src="${esc(item.image)}" alt="">
+        <span class="tile__dim"></span>
         <figcaption class="tile__cap">
           <span>${esc(item.title)}, ${esc(item.year ?? "")}</span>
           <span class="muted">${esc(item.location ?? "")}</span>
@@ -234,6 +240,31 @@
     PW = Math.round(r.width); PH = Math.round(r.height);
     pano.width = PW * dpr; pano.height = PH * dpr;
     pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    updateSpecs();
+  }
+
+  /* technical-drawing annotations */
+  const specW = $("#specW"), specPanels = $("#specPanels"), specRead = $("#specRead");
+  function updateSpecs() {
+    specW.textContent = `W = ${PW} · FLUID`;
+    specPanels.innerHTML = Array.from({ length: 7 }, (_, i) => {
+      const x = (i / 6) * 100;
+      return `<i style="left:${x}%"></i>` + (i < 6 ? `<b style="left:${x + 100 / 12}%">S${i + 1}</b>` : "");
+    }).join("");
+    document.querySelectorAll(".tile").forEach((t, i) => {
+      const r = t.getBoundingClientRect();
+      const d = t.querySelector(".tile__dim");
+      if (d) d.textContent = `T${pad(i + 1)} · ${Math.round(r.width)} × ${Math.round(r.height)}`;
+    });
+  }
+  let readTick = 0;
+  function updateReadout(e) {
+    if (++readTick % 6) return;
+    if (!Sound.on) { specRead.textContent = "silent · click to sound"; return; }
+    const st = Sound.state;
+    specRead.textContent =
+      `f ${st.f ? st.f.toFixed(1) : "—"} Hz   drive ${st.drive.toFixed(1)}   lp ${Math.round(st.lp)} Hz   rms ${e.toFixed(2)}` +
+      (Sound.drone ? "   drone" : "");
   }
 
   pano.addEventListener("pointermove", (e) => {
@@ -259,6 +290,7 @@
     pm.energy *= 0.95;
     const e = Math.min(1, pm.energy + Sound.level());
     Art.drawRidges(pctx, PW, PH, t, e, pm.x, 6, 20260);
+    updateReadout(e);
     if (!reduceMotion) requestAnimationFrame(frame);
   }
 
@@ -426,7 +458,28 @@
   }
 
   /* =======================================================
-     11. Clock, year, boot
+     11. Measure mode: dimension labels, guides, cursor readout
+     ======================================================= */
+  const measureBtn = $("#measureBtn"), cursorRead = $("#cursorRead");
+  const gx = document.createElement("div"), gy = document.createElement("div");
+  gx.className = "guide-x"; gy.className = "guide-y";
+  document.body.append(gx, gy);
+  measureBtn.addEventListener("click", () => {
+    const on = document.body.classList.toggle("measure");
+    measureBtn.setAttribute("aria-pressed", String(on));
+    updateSpecs();
+  });
+  addEventListener("pointermove", (e) => {
+    if (!document.body.classList.contains("measure")) return;
+    cursorRead.style.left = e.clientX + "px";
+    cursorRead.style.top = e.clientY + "px";
+    cursorRead.textContent = `X ${e.clientX} · Y ${e.clientY}`;
+    gx.style.top = e.clientY + "px";
+    gy.style.left = e.clientX + "px";
+  });
+
+  /* =======================================================
+     12. Clock, year, boot
      ======================================================= */
   const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Berlin", hour: "2-digit", minute: "2-digit", hour12: false });
   const tick = () => { $("#clock").textContent = "Berlin " + fmt.format(new Date()); };
@@ -438,12 +491,14 @@
     sizePano();
     const narrow = innerWidth < 900;
     if (narrow !== lastNarrow) { lastNarrow = narrow; buildCollage(); }
+    updateSpecs();
     if (reduceMotion) frame(0);
   });
 
   buildCollage();
   buildStrip();
   sizePano();
+  setTimeout(updateSpecs, 1600); // after the tiles have faded in
   requestAnimationFrame(frame);
   route();
 })();

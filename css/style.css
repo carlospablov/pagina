@@ -13,6 +13,7 @@
 
   --sans: "Inter", "Suisse Intl", "Helvetica Neue", Arial, sans-serif;
   --serif: "Instrument Serif", "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
 
   --pad: clamp(14px, 1.8vw, 26px);
   --strip: clamp(44px, 5.2vw, 84px);
@@ -159,6 +160,51 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .pano__actions { grid-column: 2; grid-row: 1 / span 2; align-self: end; display: flex; gap: 1.2em; }
 #listenBtn.is-on { color: var(--ultramarine); }
 
+/* ---------- Technical-drawing layer (dimension lines) ---------- */
+.pano__frame { position: relative; }
+.spec { position: absolute; inset: 0; pointer-events: none; font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: #7a7a7a; text-transform: uppercase; }
+.spec__w {
+  position: absolute; left: 0; right: 0; top: -30px; height: 9px;
+  border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;
+}
+.spec__w::before { content: ""; position: absolute; left: 0; right: 0; top: 4px; height: 1px; background: #9a9a9a; }
+.spec__w span { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); background: #fff; padding: 0 8px; white-space: nowrap; }
+.spec__h {
+  position: absolute; top: 0; bottom: 0; right: -30px; width: 9px;
+  border-top: 1px solid #9a9a9a; border-bottom: 1px solid #9a9a9a;
+}
+.spec__h::before { content: ""; position: absolute; top: 0; bottom: 0; left: 4px; width: 1px; background: #9a9a9a; }
+.spec__h span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; white-space: nowrap; background: #fff; padding: 6px 0; }
+.spec__panels { position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+.spec__panels i { position: absolute; top: 4px; width: 1px; height: 10px; background: #b0b0b0; font-style: normal; }
+.spec__panels b { position: absolute; top: -9px; transform: translateX(-50%); font-weight: 400; font-size: 9px; color: #9a9a9a; }
+.spec__read {
+  position: absolute; left: 10px; bottom: 8px;
+  color: rgba(180, 196, 255, .78); font-size: 10px; text-transform: none; letter-spacing: .02em;
+  white-space: pre;
+}
+
+/* ---------- Measure mode ---------- */
+.tile__dim { display: none; }
+body.measure .tile { outline: 1px dashed rgba(0, 0, 0, .55); outline-offset: -1px; }
+body.measure .tile__dim {
+  display: block; position: absolute; top: 8px; left: 8px; z-index: 3;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase;
+  background: #fff; padding: 2px 5px; color: var(--ink);
+}
+#measureBtn[aria-pressed="true"] { color: var(--ultramarine); }
+.cursor-read {
+  position: fixed; z-index: 70; pointer-events: none; display: none;
+  font-family: var(--mono); font-size: 10px; color: var(--ink);
+  background: #fff; padding: 2px 5px; transform: translate(14px, 14px);
+}
+body.measure .cursor-read { display: block; }
+body.measure { cursor: crosshair; }
+.guide-x, .guide-y { position: fixed; z-index: 69; pointer-events: none; background: rgba(20, 42, 134, .35); display: none; }
+.guide-x { left: 0; right: 0; height: 1px; }
+.guide-y { top: 0; bottom: 0; width: 1px; }
+body.measure .guide-x, body.measure .guide-y { display: block; }
+
 /* ---------- Giant cropped mark ---------- */
 .mark {
   position: fixed; left: -0.035em; bottom: -0.2em;
@@ -287,6 +333,7 @@ body.is-open .pano, body.is-open .mark { opacity: 0 !important; transition: opac
   .top__menu { display: block; }
   .pano { width: calc(100vw - var(--strip) - 2 * var(--pad)); }
   #pano { aspect-ratio: 3 / 1; }
+  .spec__h { display: none; }
   .bottom { left: auto; font-size: 12px; gap: 12px; }
   .bottom > span:last-child { display: none; }
   .detail__body { grid-template-columns: 1fr; }
