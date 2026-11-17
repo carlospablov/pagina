@@ -45,6 +45,38 @@ window.SITE = {
       items: [
         {
           type: "release",
+          title: "sense of inflowing unknown",
+          year: 2020,
+          date: "07.01.2020",
+          released: "2020-01-07",
+          label: "Zonas",
+          format: "Limited edition cassette, 200 copies · Digital",
+          location: "Zonas · Cassette",
+          image: "media/releases/sense-of-inflowing-unknown/cover.jpg",
+          thumb: "media/releases/sense-of-inflowing-unknown/cover-640.jpg",
+          accent: "#b4432f",
+          artwork: "Nicolás Rosero",
+          text: "Using field recordings and granular synthesis as a primary basis of composition, treating ambient sounds as sculptural textures, encouraging the listener to contemplate and evoque sonic atmospheres.",
+          // Sides as printed on the J-card; durations from Bandcamp
+          sides: [
+            { name: "Side A", tracks: [["Inkling", "5:14"], ["811", "2:56"], ["Vat-I", "4:48"], ["Shoulder to Shoulder", "6:34"]] },
+            { name: "Side B", tracks: [["Tilope", "3:09"], ["Anima", "15:28"], ["Nood", "5:04"]] }
+          ],
+          credits: [
+            "written and produced by Carlos Pablo Villamizar",
+            "published under Zonas",
+            "artwork by Nicolás Rosero",
+            "Berlin 2019-2020"
+          ],
+          bandcamp: { album: 254438667, url: "https://carlosvillamizar.bandcamp.com/album/sense-of-inflowing-unknown" },
+          gallery: [
+            { src: "media/releases/sense-of-inflowing-unknown/cassette-stack.jpg", caption: "Cassettes, side A" },
+            { src: "media/releases/sense-of-inflowing-unknown/jcard-sides-a-b.jpg", caption: "J-card, sides A / B" },
+            { src: "media/releases/sense-of-inflowing-unknown/cassettes-and-cases.jpg", caption: "Cassettes and cases" }
+          ]
+        },
+        {
+          type: "release",
           title: "Sueños Ligeros",
           year: 2021,
           date: "29.01.2021",
@@ -76,38 +108,6 @@ window.SITE = {
             { src: "media/releases/suenos-ligeros/jcard-insert.jpg", caption: "J-card insert" },
             { src: "media/releases/suenos-ligeros/cassettes-spines.jpg", caption: "Spines" },
             { src: "media/releases/suenos-ligeros/cassettes-side-b.jpg", caption: "Cassettes, Lado B" }
-          ]
-        },
-        {
-          type: "release",
-          title: "sense of inflowing unknown",
-          year: 2020,
-          date: "07.01.2020",
-          released: "2020-01-07",
-          label: "Zonas",
-          format: "Limited edition cassette, 200 copies · Digital",
-          location: "Zonas · Cassette",
-          image: "media/releases/sense-of-inflowing-unknown/cover.jpg",
-          thumb: "media/releases/sense-of-inflowing-unknown/cover-640.jpg",
-          accent: "#b4432f",
-          artwork: "Nicolás Rosero",
-          text: "Using field recordings and granular synthesis as a primary basis of composition, treating ambient sounds as sculptural textures, encouraging the listener to contemplate and evoque sonic atmospheres.",
-          // Sides as printed on the J-card; durations from Bandcamp
-          sides: [
-            { name: "Side A", tracks: [["Inkling", "5:14"], ["811", "2:56"], ["Vat-I", "4:48"], ["Shoulder to Shoulder", "6:34"]] },
-            { name: "Side B", tracks: [["Tilope", "3:09"], ["Anima", "15:28"], ["Nood", "5:04"]] }
-          ],
-          credits: [
-            "written and produced by Carlos Pablo Villamizar",
-            "published under Zonas",
-            "artwork by Nicolás Rosero",
-            "Berlin 2019-2020"
-          ],
-          bandcamp: { album: 254438667, url: "https://carlosvillamizar.bandcamp.com/album/sense-of-inflowing-unknown" },
-          gallery: [
-            { src: "media/releases/sense-of-inflowing-unknown/cassette-stack.jpg", caption: "Cassettes, side A" },
-            { src: "media/releases/sense-of-inflowing-unknown/jcard-sides-a-b.jpg", caption: "J-card, sides A / B" },
-            { src: "media/releases/sense-of-inflowing-unknown/cassettes-and-cases.jpg", caption: "Cassettes and cases" }
           ]
         }
       ]
