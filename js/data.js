@@ -39,7 +39,28 @@ window.SITE = {
   greeting: true,
 
   sections: [
-    { id: "works",    title: "Works",    items: [] },
+    {
+      id: "works", title: "Works",
+      items: [
+        {
+          type: "work",
+          title: "Naked Singularity",
+          category: "Installation",
+          medium: "Audio-installation",
+          subtitle: "Audio-installation that explores the cosmic background from electromagnetic noise.",
+          // year: 2023, location: "Berlin",   ← add when known
+          visual: "static",       // live 'untuned radio' visual until photos are added (then use image + gallery)
+          text: "An untuned radio frequency reveals the shadows of electromagnetic noise — residues of the cosmic background and of our own electronics. Built on a low-frequency sound system, the installation reproduces the sound of a hacked radio and of radio telescopes, tuned to an unused frequency. Passed through a filter-modulator unit, the signal radiates outward as abstract, processed radio waves.",
+          components: [
+            "Low-frequency sound system",
+            "Hacked radio",
+            "Radio-telescope sounds",
+            "Filter modulator unit",
+            "Unused radio frequency"
+          ]
+        }
+      ]
+    },
     {
       id: "releases", title: "Releases",
       items: [

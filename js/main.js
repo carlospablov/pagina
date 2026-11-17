@@ -141,7 +141,7 @@
     const href = it.ghost ? "" : `href="#item/${it.section}/${it.index}"`;
     return `
       <a class="card ${it.ghost ? "is-ghost" : ""}" ${href} data-n="${n}">
-        <div class="card__img"><img src="${esc(it.thumb || it.image || Art.render(Art.KINDS[n % 10], 3000 + n, 480, 600))}" alt="${esc(it.title)}" loading="lazy"></div>
+        <div class="card__img"><img src="${esc(it.thumb || it.image || (it.visual ? Art.render(it.visual, 4100 + n, 480, 600) : Art.render(Art.KINDS[n % 10], 3000 + n, 480, 600)))}" alt="${esc(it.title)}" loading="lazy"></div>
         <div class="card__t">${esc(it.title)}${it.year ? ", " + esc(it.year) : ""}</div>
         <div class="card__m">${esc(it.location || it.medium || "")}</div>
         <div class="card__p"><span class="link">+ More</span></div>
@@ -276,6 +276,7 @@
     const it = sec && sec.items[index];
     if (!it) return false;
     if (it.type === "release") return openRelease(it);
+    if (it.type === "work") return openWork(it, sec);
     const meta = [it.year, it.medium, it.location].filter(Boolean).map(esc).join(", ");
     const related = sec.items.map((r, i) => ({ r, i })).filter(({ i }) => i !== +index && sec.items[i].image).slice(0, 8);
     detail.classList.remove("is-release");
@@ -363,6 +364,100 @@
     return true;
   }
 
+  /* ---------- Work page ---------- */
+  let radio = null;   // animation handle for the live 'untuned radio' visual
+
+  function openWork(it, sec) {
+    const n = sec.items.indexOf(it) + 1;
+    const meta = [it.year, it.location].filter(Boolean).map(esc).join(" · ");
+    const media = it.image
+      ? `<img src="${esc(it.image)}" alt="${esc(it.title)}">`
+      : it.visual === "static"
+        ? `<canvas class="work__radio" id="workRadio" aria-label="Live visual: noise of an untuned radio frequency"></canvas>`
+        : "";
+    $("#detailBody").innerHTML = `
+      <article class="release work">
+       <div class="release__top">
+        <div class="release__cover">
+          ${media}
+          <span class="release__fig">FIG. 00 — ${it.image ? "INSTALLATION VIEW" : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
+        </div>
+        <div class="release__info">
+          <p class="release__kicker">WORK ${pad(n)} · ${esc((it.category || "").toUpperCase())}</p>
+          <h3 class="release__title">${esc(it.title)}</h3>
+          ${it.subtitle ? `<p class="work__subtitle">${esc(it.subtitle)}</p>` : ""}
+          ${meta ? `<p class="release__meta">${meta}</p>` : ""}
+          <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}</div>
+          ${it.components ? `<div class="release__side work__parts">
+              <p class="release__label">Elements</p>
+              <ol>${it.components.map((c) => `<li><span>${esc(c)}</span><i></i></li>`).join("")}</ol>
+            </div>` : ""}
+          ${it.credits ? `<div class="release__credits"><p class="release__label">Credits</p>${it.credits.map((c) => `<p>${esc(c)}</p>`).join("")}</div>` : ""}
+        </div>
+       </div>
+        ${(it.gallery || []).length ? `
+          <div class="release__gallery" data-count="${it.gallery.length}">
+            ${it.gallery.map((g, i) => `
+              <figure>
+                <button class="release__shot" data-src="${esc(g.src)}" aria-label="Enlarge: ${esc(g.caption || "")}"><img src="${esc(g.src)}" alt="${esc(g.caption || it.title)}" loading="lazy"></button>
+                <figcaption>FIG. ${pad(i + 1)} — ${esc((g.caption || "").toUpperCase())}</figcaption>
+              </figure>`).join("")}
+          </div>` : ""}
+      </article>`;
+    $("#detailBody").querySelectorAll(".release__shot").forEach((b) =>
+      b.addEventListener("click", () => openLightbox(b.dataset.src, b.querySelector("img").alt)));
+    if (!it.image && it.visual === "static") startRadio($("#workRadio"));
+    detail.classList.add("is-visible", "is-release");
+    detail.setAttribute("aria-hidden", "false");
+    detail.scrollTop = 0;
+    document.title = `${it.title} — Carlos Villamizar`;
+    return true;
+  }
+
+  // A slowly scrolling 'waterfall' of radio noise: grain + faint drifting carriers
+  function startRadio(canvas) {
+    stopRadio();
+    const ctx = canvas.getContext("2d");
+    const W = 360, H = 360;
+    canvas.width = W; canvas.height = H;
+    ctx.fillStyle = "#eeede8"; ctx.fillRect(0, 0, W, H);
+    const carriers = Array.from({ length: 6 }, () => ({ x: Math.random() * W, w: 1.5 + Math.random() * 7, s: 0.12 + Math.random() * 0.35, drift: (Math.random() - 0.5) * 0.25 }));
+    const row = ctx.createImageData(W, 1), d = row.data;
+    let t = 0, frame = 0;
+    const loop = () => {
+      if (!detail.classList.contains("is-visible")) { radio = null; return; }
+      if (frame++ % 2 === 0) {
+        ctx.drawImage(canvas, 0, 0, W, H - 1, 0, 1, W, H - 1);   // scroll down 1px
+        t++;
+        const burst = Math.random() < 0.01 ? 0.5 : 0;            // rare bursts of interference
+        for (const c of carriers) { c.x = (c.x + c.drift + W) % W; c.s = Math.max(0.05, Math.min(0.55, c.s + (Math.random() - 0.5) * 0.03)); }
+        for (let x = 0; x < W; x++) {
+          let v = Math.pow(Math.random(), 3) * 0.7 + burst * Math.random();
+          for (const c of carriers) { const dx = (x - c.x) / c.w; v += c.s * Math.exp(-dx * dx) * (0.55 + Math.random() * 0.45); }
+          const g = 238 - Math.min(1, v) * 222;
+          d[x * 4] = g; d[x * 4 + 1] = g; d[x * 4 + 2] = g - 4; d[x * 4 + 3] = 255;
+        }
+        ctx.putImageData(row, 0, 0);
+      }
+      radio = requestAnimationFrame(loop);
+    };
+    // pre-fill so the visual is complete from the first moment
+    for (let i = 0; i < H; i++) { frame = 0; loopFill(); }
+    function loopFill() {
+      ctx.drawImage(canvas, 0, 0, W, H - 1, 0, 1, W, H - 1);
+      for (let x = 0; x < W; x++) {
+        let v = Math.pow(Math.random(), 3) * 0.7;
+        for (const c of carriers) { const dx = (x - c.x) / c.w; v += c.s * Math.exp(-dx * dx) * (0.55 + Math.random() * 0.45); }
+        const g = 238 - Math.min(1, v) * 222;
+        d[x * 4] = g; d[x * 4 + 1] = g; d[x * 4 + 2] = g - 4; d[x * 4 + 3] = 255;
+      }
+      ctx.putImageData(row, 0, 0);
+      for (const c of carriers) c.x = (c.x + c.drift + W) % W;
+    }
+    radio = requestAnimationFrame(loop);
+  }
+  function stopRadio() { if (radio) cancelAnimationFrame(radio); radio = null; }
+
   /* ---------- Lightbox ---------- */
   const lightbox = document.createElement("div");
   lightbox.className = "lightbox";
@@ -376,7 +471,7 @@
   function closeLightbox() { lightbox.classList.remove("is-visible"); }
   lightbox.addEventListener("click", closeLightbox);
 
-  function closeDetail() { closeLightbox(); detail.classList.remove("is-visible", "is-release"); detail.setAttribute("aria-hidden", "true"); }
+  function closeDetail() { stopRadio(); closeLightbox(); detail.classList.remove("is-visible", "is-release"); detail.setAttribute("aria-hidden", "true"); }
   $("#detailBack").addEventListener("click", () => history.back());
   $("#detailClose").addEventListener("click", () => goHome());
 

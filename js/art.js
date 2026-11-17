@@ -129,6 +129,25 @@ window.Art = (() => {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h * (0.5 + r() * 0.5)); ctx.stroke();
     },
 
+    // untuned radio: a still of the noise waterfall
+    static(ctx, w, h, r) {
+      const img = ctx.createImageData(w, h), d = img.data;
+      const bands = Array.from({ length: 5 }, () => [r() * w, 2 + r() * 10, 0.15 + r() * 0.35]);
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          let v = Math.pow(Math.random(), 3) * 0.75;
+          for (const [bx, bw, bs] of bands) {
+            const dx = (x - bx - Math.sin(y * 0.02) * 6) / bw;
+            v += bs * Math.exp(-dx * dx) * (0.6 + Math.random() * 0.4);
+          }
+          const c = 238 - Math.min(1, v) * 220;
+          const i = (y * w + x) * 4;
+          d[i] = c; d[i + 1] = c; d[i + 2] = c - 4; d[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    },
+
     // ultramarine ridges: layered mountain lines
     ridges(ctx, w, h, r) {
       drawRidges(ctx, w, h, r() * 100, 0, -1, 0, Math.floor(r() * 1e6));
