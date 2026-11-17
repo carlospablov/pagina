@@ -387,7 +387,9 @@
   function openWork(it, sec) {
     const n = sec.items.indexOf(it) + 1;
     const meta = [it.year, it.location].filter(Boolean).map(esc).join(" · ");
-    const media = it.video
+    const media = it.youtube
+      ? `<div class="work__yt"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.youtube)}?rel=0" title="${esc(it.title)} — video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`
+      : it.video
       ? `<div class="work__video">
            <video id="workVideo" src="${esc(it.video.src)}" poster="${esc(it.video.poster || "")}" autoplay muted loop playsinline preload="metadata"></video>
            <button class="link work__sound" id="workSound" aria-pressed="false">+ Sound on</button>
@@ -402,15 +404,17 @@
        <div class="release__top">
         <div class="release__cover">
           ${media}
-          <span class="release__fig">FIG. 00 — ${it.video ? esc((it.video.caption || "Video").toUpperCase()) : it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
+          <span class="release__fig">FIG. 00 — ${it.youtube ? "VIDEO" : it.video ? esc((it.video.caption || "Video").toUpperCase()) : it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
         </div>
         <div class="release__info">
-          <p class="release__kicker">WORK ${pad(n)} · ${esc((it.category || "").toUpperCase())}</p>
+          <p class="release__kicker">${sec.id === "collaborations" ? "COLLABORATION" : "WORK"} ${pad(n)} · ${esc((it.category || "").toUpperCase())}</p>
           <h3 class="release__title">${esc(it.title)}</h3>
           ${it.subtitle ? `<p class="work__subtitle">${esc(it.subtitle)}</p>` : ""}
           ${meta ? `<p class="release__meta">${meta}</p>` : ""}
+          ${it.roles ? `<div class="release__side work__roles"><ol>${it.roles.map((r) => `<li><span class="work__role">${esc(r.role)}</span><span>${r.link ? `<a class="link" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name)}</span></li>`).join("")}</ol></div>` : ""}
           ${it.audio ? playerHTML(it.audio) : ""}
-          <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}</div>
+          <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}${it.textNote ? `<p class="work__note">${esc(it.textNote)}</p>` : ""}</div>
+          ${it.tools ? `<p class="release__meta work__tools">TOOLS · ${esc(it.tools.toUpperCase())}</p>` : ""}
           ${it.research ? `<div class="release__text work__research"><p class="release__label">Research</p><p>${esc(it.research)}</p></div>` : ""}
           ${it.exhibitions ? `<div class="release__side work__shows">
               <p class="release__label">Presented at</p>
@@ -422,11 +426,14 @@
         ${(it.gallery || []).length ? `
           <div class="release__gallery" data-count="${it.gallery.length}">
             ${it.gallery.map((g, i) => `
-              <figure>
-                <button class="release__shot" data-src="${esc(g.src)}" aria-label="Enlarge: ${esc(g.caption || "")}"><img src="${esc(g.src)}" alt="${esc(g.caption || it.title)}" loading="lazy"></button>
+              <figure${g.youtube ? ' class="is-video"' : ""}>
+                ${g.youtube
+                  ? `<div class="work__yt"><iframe src="https://www.youtube-nocookie.com/embed/${esc(g.youtube)}?rel=0" title="${esc(g.caption || it.title)}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`
+                  : `<button class="release__shot" data-src="${esc(g.src)}" aria-label="Enlarge: ${esc(g.caption || "")}"><img src="${esc(g.src)}" alt="${esc(g.caption || it.title)}" loading="lazy"></button>`}
                 <figcaption>FIG. ${pad(i + 1)} — ${esc((g.caption || "").toUpperCase())}</figcaption>
               </figure>`).join("")}
-          </div>` : ""}
+          </div>
+          ${it.credit ? `<p class="release__fig work__credit">${esc(it.credit.toUpperCase())}</p>` : ""}` : ""}
       </article>`;
     $("#detailBody").querySelectorAll(".release__shot").forEach((b) =>
       b.addEventListener("click", () => openLightbox(b.dataset.src, b.querySelector("img").alt)));

@@ -172,6 +172,40 @@ window.SITE = {
       ]
     },
     {
+      id: "collaborations", title: "Collaborations",
+      items: [
+        {
+          type: "work",
+          title: "Spectral Lures",
+          category: "Audiovisual live performance",
+          medium: "Audiovisual live performance · sound design",
+          subtitle: "An audiovisual live performance by Carlos.exe (Carlos Serrano), with sound design by Carlos Villamizar.",
+          // year: ,   ← add when known
+          // Images are linked from Carlos Serrano's site (cayequitas.com).
+          // To host them here instead, put the files in media/collaborations/spectral-lures/ and change the paths.
+          image: "https://cayequitas.com/assets/media/spectral-lures/07.webp",
+          youtube: "_F1qOQATaVA",
+          roles: [
+            { role: "Concept & visuals", name: "Carlos Serrano (Carlos.exe)", link: "https://cayequitas.com/#p-spectral-lures" },
+            { role: "Sound design", name: "Carlos Villamizar" }
+          ],
+          text: "An experimental audiovisual performance that drifts across the borders of illusion and perception. Sound and image are conjured together live, shimmering like mirages that seduce the senses before dissolving into instability. Spectral tones, fractured pulses and synthetic textures hover between resonance and rupture, while visuals generated in real time build transient architectures, spectral terrains and impossible geometries that emerge only to collapse again. Neither concert nor film, Spectral Lures is an immersion: a drift through unstable realities where sound and light entwine into shifting horizons.",
+          textNote: "Text adapted from Carlos Serrano.",
+          tools: "TouchDesigner · Unreal Engine · Ableton Live",
+          gallery: [
+            { youtube: "HLOeoYEUsDQ", caption: "Performance video" },
+            { src: "https://cayequitas.com/assets/media/spectral-lures/01.webp", caption: "Performance" },
+            { src: "https://cayequitas.com/assets/media/spectral-lures/10.webp", caption: "Performance" },
+            { src: "https://cayequitas.com/assets/media/spectral-lures/13.webp", caption: "Live" },
+            { src: "https://cayequitas.com/assets/media/spectral-lures/15.webp", caption: "Audience" },
+            { src: "https://cayequitas.com/assets/media/spectral-lures/04.webp", caption: "Live setup with Unreal Engine, TouchDesigner and Ableton Live" },
+            { src: "https://cayequitas.com/assets/media/spectral-lures/08.webp", caption: "Previz of the show and screen dimensions" }
+          ],
+          credit: "Images and videos: Carlos Serrano"
+        }
+      ]
+    },
+    {
       id: "about", title: "About", items: [],
       // Shown exactly as written: one entry per line.
       text: [
