@@ -212,7 +212,7 @@
   }
   function closeDetail() { detail.classList.remove("is-visible"); detail.setAttribute("aria-hidden", "true"); }
   $("#detailBack").addEventListener("click", () => history.back());
-  $("#detailClose").addEventListener("click", () => { location.hash = ""; });
+  $("#detailClose").addEventListener("click", () => goHome());
 
   /* =======================================================
      9. Router (hash based, works on GitHub Pages)
@@ -235,17 +235,39 @@
     document.title = "Carlos Villamizar — Sound Artist";
   }
 
+  // Back to the home page. Removes the #hash cleanly where allowed;
+  // in sandboxed previews (srcdoc iframes) pushState is blocked, so fall back.
+  function goHome() {
+    try {
+      history.pushState(null, "", location.href.split("#")[0]);
+      route();
+    } catch (_) {
+      if (location.hash) location.hash = ""; // triggers route() via hashchange
+      else route();
+    }
+  }
+
   document.querySelectorAll("[data-home]").forEach((el) =>
     el.addEventListener("click", (e) => {
       e.preventDefault();
-      history.pushState("", document.title, location.pathname + location.search);
-      route();
+      goHome();
     }));
+  // Handle all in-page "#section" links ourselves, so navigation also works
+  // when the page runs inside sandboxed previews (srcdoc iframes).
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a || a.hasAttribute("data-home") || e.metaKey || e.ctrlKey) return;
+    e.preventDefault();
+    const h = a.getAttribute("href");
+    if (h === "#") goHome();
+    else if (location.hash === h) route();
+    else location.hash = h;
+  });
   addEventListener("hashchange", route);
   addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     if ($("#hi").classList.contains("is-visible")) return closeHi();
-    if (location.hash) location.hash = "";
+    if (location.hash) goHome();
   });
 
   /* =======================================================
