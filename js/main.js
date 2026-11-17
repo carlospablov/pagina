@@ -70,23 +70,6 @@
 
   const collage = $("#collage");
 
-  // Grain texture for the 'untuned radio' static, generated once
-  (function makeNoise() {
-    const c = document.createElement("canvas"); c.width = c.height = 220;
-    const x = c.getContext("2d"), img = x.createImageData(220, 220), d = img.data;
-    for (let i = 0; i < d.length; i += 4) {
-      const v = Math.random() < 0.55 ? 255 : 150 + Math.random() * 105;
-      d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255;
-    }
-    // a few horizontal interference lines
-    for (let k = 0; k < 3; k++) {
-      const y = Math.floor(Math.random() * 220), x0 = Math.floor(Math.random() * 120), len = 60 + Math.random() * 100;
-      for (let xx = x0; xx < Math.min(220, x0 + len); xx++) { const o = (y * 220 + xx) * 4; d[o] = d[o + 1] = d[o + 2] = 205; }
-    }
-    x.putImageData(img, 0, 0);
-    document.documentElement.style.setProperty("--noise", `url(${c.toDataURL()})`);
-  })();
-
   // The tape-in animation plays once per visit
   try {
     if (sessionStorage.getItem("cv-intro")) document.body.classList.add("no-intro");
@@ -108,7 +91,6 @@
       tile.style.cssText = `left:${L.x}%;top:${L.y}%;width:${L.w}%;height:${L.h}%;--veil:${L.veil};--i:${i}`;
       tile.innerHTML = `
         <img src="${esc(src)}" alt="${esc(real ? real.title + (real.caption ? ", " + real.caption : "") : "")}">
-        <span class="tile__noise"></span>
         <span class="tile__dim"></span>
         <figcaption class="tile__cap">
           <span>${esc(item.title)}, ${esc(item.year ?? "")}</span>
@@ -120,20 +102,8 @@
       });
       collage.appendChild(tile);
     });
-    startTuningCycle();
   }
 
-  // On touch screens there is no hover: tune the pictures in one after another
-  let tuneTimer = null;
-  function startTuningCycle() {
-    clearInterval(tuneTimer);
-    if (!matchMedia("(hover: none)").matches) return;
-    const tiles = [...collage.querySelectorAll(".tile")];
-    let k = 0;
-    const step = () => { tiles.forEach((t, j) => t.classList.toggle("is-tuned", j === k % tiles.length)); k++; };
-    setTimeout(step, 1600);
-    tuneTimer = setInterval(step, 3200);
-  }
 
   /* =======================================================
      4. Thumbnail strip (slowly scrolling)
