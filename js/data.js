@@ -191,7 +191,7 @@ window.SITE = {
           },
           // how it is labelled on the home page
           homeTitle: "Spectral Lures by Carlos.exe",
-          homeMeta: "Role: sound design",
+          homeMeta: "Sound design",
           roles: [
             { role: "Concept & visuals", name: "Carlos Serrano", link: "https://cayequitas.com/#p-spectral-lures" },
             { role: "Sound design", name: "Carlos Villamizar" }
