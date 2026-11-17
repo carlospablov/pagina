@@ -379,7 +379,8 @@ body.is-open .bottom { background: rgba(255,255,255,.92); padding: 6px 10px; mar
 .work__radio { display: block; width: 100%; aspect-ratio: 1; image-rendering: pixelated; box-shadow: 0 34px 70px -24px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .08); }
 .work__subtitle { margin-top: 1rem; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.4; max-width: 34rem; color: #3a3a3a; }
 .work { --accent: var(--ink); }
-.work__parts li::before { content: "—"; color: #9a9a9a; }
+.work__shows li::before { content: none; }
+.work__shows em { font-style: normal; color: #6f6f6f; }
 
 /* ---------- Audio player ---------- */
 .player {

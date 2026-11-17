@@ -48,10 +48,15 @@ window.SITE = {
           category: "Installation",
           medium: "Audio-installation",
           subtitle: "Audio-installation that explores the cosmic background from electromagnetic noise.",
-          // year: 2017, location: "Berlin",   ← add when known
+          year: 2017,
+          location: "Berlin / Szczecin",
+          exhibitions: [
+            { title: "48 Stunden Neukölln", place: "Berlin", date: "Jun/2017" },
+            { title: "Młode Wilki Festival", place: "Szczecin", date: "Nov/2017" }
+          ],
           image: "media/works/naked-singularity/installation-view.jpg",
           thumb: "media/works/naked-singularity/installation-view-720.jpg",
-          imageCaption: "Installation view",
+          imageCaption: "Installation view · Młode Wilki Festival, Szczecin",
           audio: {
             src: "media/works/naked-singularity/naked-singularity.mp3",
             label: "Excerpt",
@@ -59,19 +64,12 @@ window.SITE = {
             peaks: [0.691, 0.835, 0.742, 0.751, 0.65, 0.718, 0.748, 0.834, 0.74, 0.806, 0.647, 0.733, 0.694, 0.974, 0.781, 0.675, 0.613, 0.634, 0.789, 0.668, 0.805, 0.807, 0.707, 0.928, 0.854, 0.794, 0.834, 0.975, 0.715, 0.767, 0.642, 0.676, 0.77, 0.666, 0.722, 0.74, 0.843, 0.764, 0.651, 0.796, 0.821, 0.809, 0.788, 0.716, 0.813, 0.773, 0.784, 0.856, 0.942, 0.697, 0.715, 0.673, 0.665, 0.702, 0.946, 0.686, 0.807, 0.901, 0.766, 0.727, 0.761, 0.82, 0.735, 0.787, 0.759, 0.788, 0.7, 0.837, 0.822, 0.735, 0.72, 0.669, 0.695, 0.657, 0.735, 0.753, 0.825, 0.761, 0.736, 0.834, 0.815, 0.699, 0.66, 0.697, 0.838, 0.718, 0.633, 0.668, 0.877, 0.688, 0.813, 0.749, 0.775, 0.613, 0.669, 0.645, 0.753, 0.667, 0.708, 0.84, 0.763, 0.759, 1.0, 0.822, 0.776, 0.654, 0.698, 0.737, 0.639, 0.74, 0.768, 0.79, 0.8, 0.637, 0.831, 0.655, 0.744, 0.745, 0.856, 0.851, 0.808, 0.777, 0.766, 0.696, 0.626, 0.74, 0.899, 0.801, 0.706, 0.694, 0.672, 0.702, 0.761, 0.742, 0.703, 0.674, 0.692, 0.785, 0.621, 0.744, 0.682, 0.76, 0.7, 0.793, 0.726, 0.739, 0.667, 0.722, 0.778, 0.918, 0.816, 0.792, 0.745, 0.737, 0.713, 0.768, 0.676, 0.744, 0.677, 0.852, 0.709, 0.781, 0.692, 0.768, 0.691, 0.953, 0.647, 0.661, 0.682, 0.672, 0.763, 0.646, 0.569, 0.753, 0.745, 0.766, 0.641, 0.6, 0.668, 0.824]
           },
           gallery: [
-            { src: "media/works/naked-singularity/satellite-dish.jpg", caption: "Satellite dish and receiver" },
+            { src: "media/works/naked-singularity/satellite-dish.jpg", caption: "Satellite dish and receiver · Młode Wilki Festival, Szczecin" },
             { src: "media/works/naked-singularity/floor-plan.jpg", caption: "Floor plan" },
-            { src: "media/works/naked-singularity/red-blue-light.jpg", caption: "Red and blue light" },
-            { src: "media/works/naked-singularity/opening.jpg", caption: "Opening" }
+            { src: "media/works/naked-singularity/red-blue-light.jpg", caption: "Red and blue light · 48 Stunden Neukölln, Berlin" },
+            { src: "media/works/naked-singularity/opening.jpg", caption: "Opening · Młode Wilki Festival, Szczecin" }
           ],
-          text: "An untuned radio frequency reveals the shadows of electromagnetic noise — residues of the cosmic background and of our own electronics. Built on a low-frequency sound system, the installation reproduces the sound of a hacked radio and of radio telescopes, tuned to an unused frequency. Passed through a filter-modulator unit, the signal radiates outward as abstract, processed radio waves.",
-          components: [
-            "Low-frequency sound system",
-            "Hacked radio",
-            "Radio-telescope sounds",
-            "Filter modulator unit",
-            "Unused radio frequency"
-          ]
+          text: "An untuned radio frequency reveals the shadows of electromagnetic noise, residues of the cosmic background and of our own electronics. Built on a low-frequency sound system, the installation reproduces the sound of a hacked radio and of radio telescopes, tuned to an unused frequency. Passed through a filter-modulator unit, the signal radiates outward as abstract, processed radio waves."
         }
       ]
     },

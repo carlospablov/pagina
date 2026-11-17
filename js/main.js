@@ -389,9 +389,9 @@
           ${meta ? `<p class="release__meta">${meta}</p>` : ""}
           ${it.audio ? playerHTML(it.audio) : ""}
           <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}</div>
-          ${it.components ? `<div class="release__side work__parts">
-              <p class="release__label">Elements</p>
-              <ol>${it.components.map((c) => `<li><span>${esc(c)}</span><i></i></li>`).join("")}</ol>
+          ${it.exhibitions ? `<div class="release__side work__shows">
+              <p class="release__label">Presented at</p>
+              <ol>${it.exhibitions.map((x) => `<li><span>${esc(x.title)} <em>— ${esc(x.place)}</em></span><i></i><b>${esc(x.date)}</b></li>`).join("")}</ol>
             </div>` : ""}
           ${it.credits ? `<div class="release__credits"><p class="release__label">Credits</p>${it.credits.map((c) => `<p>${esc(c)}</p>`).join("")}</div>` : ""}
         </div>
