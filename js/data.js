@@ -208,7 +208,8 @@ window.SITE = {
             { src: "media/collaborations/spectral-lures/duo-live.jpg", caption: "Carlos.exe live" },
             { src: "media/collaborations/spectral-lures/dome-back-view.jpg", caption: "Under the dome · B-Dome, Berlin" },
             { src: "media/collaborations/spectral-lures/dome-performance.jpg", caption: "Performance · B-Dome, Berlin" },
-            { src: "media/collaborations/spectral-lures/live-portrait.jpg", caption: "Sound, live" }
+            { src: "media/collaborations/spectral-lures/still-forest.jpg", caption: "Video still · Alte Münze, Berlin" },
+            { src: "media/collaborations/spectral-lures/still-wide.jpg", caption: "Video still · Alte Münze, Berlin" }
           ]
         }
       ]
