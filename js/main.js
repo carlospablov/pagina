@@ -20,6 +20,13 @@
   SITE.sections.forEach((sec) => sec.items.forEach((it, i) => allItems.push({ ...it, section: sec.id, index: i })));
   const withImages = allItems.filter((it) => it.image);
 
+  // Every real picture (cover first, then gallery photos) for the home collage + strip
+  const pool = [];
+  withImages.forEach((it) => {
+    pool.push({ ...it, src: it.image });
+    (it.gallery || []).forEach((g) => pool.push({ ...it, src: g.src, caption: g.caption }));
+  });
+
   const PLACEHOLDER_NAMES = {
     spectrogram: "Spectrogram study", haze: "Room tone", chladni: "Chladni figure",
     waveform: "Waveform", lissajous: "Lissajous figure", ridges: "Landscape"
@@ -59,13 +66,14 @@
     const layout = narrow ? LAYOUT_NARROW : LAYOUT_WIDE;
     collage.innerHTML = "";
     layout.forEach((L, i) => {
-      const real = withImages[i];
+      const real = pool[i];
       const item = real || placeholder(i, 640, Math.round(640 * (L.h / L.w) * (innerHeight / innerWidth) * 1.1) || 640);
+      const src = real ? real.src : item.image;
       const tile = document.createElement("figure");
       tile.className = "tile";
       tile.style.cssText = `left:${L.x}%;top:${L.y}%;width:${L.w}%;height:${L.h}%;--veil:${L.veil};--i:${i}`;
       tile.innerHTML = `
-        <img src="${esc(item.image)}" alt="">
+        <img src="${esc(src)}" alt="${esc(real ? real.title + (real.caption ? ", " + real.caption : "") : "")}">
         <span class="tile__dim"></span>
         <figcaption class="tile__cap">
           <span>${esc(item.title)}, ${esc(item.year ?? "")}</span>
@@ -86,7 +94,7 @@
     const strip = $("#strip");
     const n = 14;
     const thumbs = Array.from({ length: n }, (_, i) =>
-      withImages[i] ? { ...withImages[i] } : placeholder(i + 20, 120, 150));
+      pool[i] ? { ...pool[i], image: pool[i].src } : placeholder(i + 20, 120, 150));
     const track = document.createElement("div");
     track.className = "strip__track";
     [...thumbs, ...thumbs].forEach((t) => {
@@ -134,7 +142,7 @@
     const href = it.ghost ? "" : `href="#item/${it.section}/${it.index}"`;
     return `
       <a class="card ${it.ghost ? "is-ghost" : ""}" ${href} data-n="${n}">
-        <div class="card__img"><img src="${esc(it.image || Art.render(Art.KINDS[n % 10], 3000 + n, 480, 600))}" alt="${esc(it.title)}" loading="lazy"></div>
+        <div class="card__img"><img src="${esc(it.thumb || it.image || Art.render(Art.KINDS[n % 10], 3000 + n, 480, 600))}" alt="${esc(it.title)}" loading="lazy"></div>
         <div class="card__t">${esc(it.title)}${it.year ? ", " + esc(it.year) : ""}</div>
         <div class="card__m">${esc(it.location || it.medium || "")}</div>
         <div class="card__p"><span class="link">+ More</span></div>
@@ -268,8 +276,10 @@
     const sec = SITE.sections.find((s) => s.id === sectionId);
     const it = sec && sec.items[index];
     if (!it) return false;
+    if (it.type === "release") return openRelease(it);
     const meta = [it.year, it.medium, it.location].filter(Boolean).map(esc).join(", ");
     const related = sec.items.map((r, i) => ({ r, i })).filter(({ i }) => i !== +index && sec.items[i].image).slice(0, 8);
+    detail.classList.remove("is-release");
     $("#detailBody").innerHTML = `
       <div class="detail__media">
         ${it.video ? `<iframe src="${esc(it.video)}" allow="autoplay; fullscreen" allowfullscreen></iframe>` : ""}
@@ -290,7 +300,81 @@
     document.title = `${it.title} — Carlos Villamizar`;
     return true;
   }
-  function closeDetail() { detail.classList.remove("is-visible"); detail.setAttribute("aria-hidden", "true"); }
+  /* ---------- Release page ---------- */
+  const toSec = (t) => t.split(":").reduce((a, v) => a * 60 + +v, 0);
+  const fmtTime = (sec) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+
+  function openRelease(it) {
+    const tracks = (it.sides || []).flatMap((sd) => sd.tracks);
+    const total = fmtTime(tracks.reduce((a, [, d]) => a + toSec(d), 0));
+    const relIndex = (SITE.sections.find((x) => x.id === "releases")?.items.indexOf(
+      SITE.sections.find((x) => x.id === "releases").items.find((x) => x.title === it.title)) ?? 0) + 1;
+    const accent = it.accent || "var(--ultramarine)";
+    const bc = it.bandcamp && it.bandcamp.album
+      ? `<iframe class="release__player" title="${esc(it.title)} on Bandcamp" loading="lazy"
+           src="https://bandcamp.com/EmbeddedPlayer/album=${encodeURIComponent(it.bandcamp.album)}/size=large/bgcol=ffffff/linkcol=${(it.accent || "#142a86").replace("#", "")}/tracklist=false/artwork=none/transparent=true/"
+           seamless></iframe>` : "";
+
+    $("#detailBody").innerHTML = `
+      <article class="release" style="--accent:${esc(accent)}">
+       <div class="release__top">
+        <div class="release__cover">
+          <img src="${esc(it.image)}" alt="${esc(it.title)}, cover artwork">
+          <span class="release__fig">FIG. 00 — COVER${it.credits && it.credits[0] ? " · " + esc(it.credits[0].replace("_", ":")) : ""}</span>
+        </div>
+        <div class="release__info">
+          <p class="release__kicker">RELEASE ${pad(relIndex)} · ${esc((it.label || "").toUpperCase())} · ${esc((it.format || "").toUpperCase())}</p>
+          <h3 class="release__title">${esc(it.title)}</h3>
+          <p class="release__meta">${esc(it.date || it.year)} · ${tracks.length} TRACKS · ${total}</p>
+          ${bc}
+          <div class="release__text">
+            ${it.text ? `<p>${esc(it.text)}</p>` : ""}
+            ${it.textEs ? `<p class="release__sep">//</p><p class="release__es">${esc(it.textEs)}</p>` : ""}
+          </div>
+          ${(it.sides || []).map((sd) => `
+            <div class="release__side">
+              <p class="release__sidename">${esc(sd.name)}</p>
+              <ol>${sd.tracks.map(([t, d]) => `<li><span>${esc(t)}</span><i></i><b>${esc(d)}</b></li>`).join("")}</ol>
+            </div>`).join("")}
+          ${it.credits ? `<div class="release__credits"><p class="release__label">Credits</p>${it.credits.map((c) => `<p>${esc(c)}</p>`).join("")}</div>` : ""}
+          <p class="release__links">
+            ${it.bandcamp ? `<a class="link" href="${esc(it.bandcamp.url)}" target="_blank" rel="noopener">+ Listen &amp; buy on Bandcamp</a>` : ""}
+          </p>
+        </div>
+       </div>
+        ${(it.gallery || []).length ? `
+          <div class="release__gallery">
+            ${it.gallery.map((g, i) => `
+              <figure>
+                <button class="release__shot" data-src="${esc(g.src)}" aria-label="Enlarge: ${esc(g.caption || "")}"><img src="${esc(g.src)}" alt="${esc(g.caption || it.title)}" loading="lazy"></button>
+                <figcaption>FIG. ${pad(i + 1)} — ${esc((g.caption || "").toUpperCase())}</figcaption>
+              </figure>`).join("")}
+          </div>` : ""}
+      </article>`;
+
+    $("#detailBody").querySelectorAll(".release__shot").forEach((b) =>
+      b.addEventListener("click", () => openLightbox(b.dataset.src, b.querySelector("img").alt)));
+    detail.classList.add("is-visible", "is-release");
+    detail.setAttribute("aria-hidden", "false");
+    detail.scrollTop = 0;
+    document.title = `${it.title} — Carlos Villamizar`;
+    return true;
+  }
+
+  /* ---------- Lightbox ---------- */
+  const lightbox = document.createElement("div");
+  lightbox.className = "lightbox";
+  lightbox.innerHTML = `<img alt=""><button class="link lightbox__x" aria-label="Close">X</button>`;
+  document.body.appendChild(lightbox);
+  function openLightbox(src, alt) {
+    lightbox.querySelector("img").src = src;
+    lightbox.querySelector("img").alt = alt || "";
+    lightbox.classList.add("is-visible");
+  }
+  function closeLightbox() { lightbox.classList.remove("is-visible"); }
+  lightbox.addEventListener("click", closeLightbox);
+
+  function closeDetail() { closeLightbox(); detail.classList.remove("is-visible", "is-release"); detail.setAttribute("aria-hidden", "true"); }
   $("#detailBack").addEventListener("click", () => history.back());
   $("#detailClose").addEventListener("click", () => goHome());
 
@@ -346,6 +430,7 @@
   addEventListener("hashchange", route);
   addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
+    if (lightbox.classList.contains("is-visible")) return closeLightbox();
     if ($("#hi").classList.contains("is-visible")) return closeHi();
     if (location.hash) goHome();
   });
