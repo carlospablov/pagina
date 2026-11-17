@@ -91,11 +91,12 @@
       const item = real;
       const src = real.src;
       const tile = document.createElement("figure");
-      tile.className = "tile" + (item.tileFit === "contain" ? " tile--contain" : "");
+      tile.className = "tile" + (item.tileLogos ? " tile--logos" : "");
       tile.style.cssText = `left:${L.x}%;top:${L.y}%;width:${L.w}%;height:${L.h}%;--veil:${L.veil};--i:${i}`;
       tile.innerHTML = `
-        <img src="${esc(src)}" alt="${esc(real ? real.title + (real.caption ? ", " + real.caption : "") : "")}">
-        <span class="tile__dim"></span>
+        ${item.tileLogos
+          ? item.tileLogos.map((l, j) => `<img src="${esc(l)}" alt="${j ? "" : esc(item.title)}"${j ? "" : ' class="is-on"'}>`).join("")
+          : `<img src="${esc(src)}" alt="${esc(real ? real.title + (real.caption ? ", " + real.caption : "") : "")}">`}
         <figcaption class="tile__cap">
           <span>${esc(item.homeTitle || item.title)}, ${esc(item.year ?? "")}</span>
           <span class="muted">${esc(item.homeMeta || (item.type === "release" ? item.location : item.medium || item.location || ""))}</span>
@@ -105,6 +106,17 @@
         location.hash = item.ghost ? "#works" : `#item/${item.section}/${item.index}`;
       });
       collage.appendChild(tile);
+      if (item.tileLogos) {
+        const imgs = [...tile.querySelectorAll("img")];
+        let k = 0;
+        setInterval(() => {
+          if (document.body.classList.contains("is-open")) return;
+          k = (k + 1) % imgs.length;
+          tile.classList.add("is-glitch");
+          setTimeout(() => imgs.forEach((im, j) => im.classList.toggle("is-on", j === k)), 90);
+          setTimeout(() => tile.classList.remove("is-glitch"), 260);
+        }, 2600 + i * 37);
+      }
     });
   }
 

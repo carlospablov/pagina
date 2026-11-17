@@ -101,9 +101,11 @@ body.no-intro .tile { animation: none; opacity: 1; }
   transform: scale(1.06);
   transition: transform 2.4s var(--ease);
 }
-.tile--contain { background: #fff; outline: 1px solid #e6e6e6; outline-offset: -1px; }
-.tile--contain img { object-fit: contain; padding: 6% 8% 34%; transform: none; }
-.tile--contain:hover img { transform: none; }
+.tile--logos { background: #000; }
+.tile--logos img { position: absolute; inset: 0; object-fit: contain; padding: 10% 10% 30%; transform: none; opacity: 0; }
+.tile--logos img.is-on { opacity: 1; }
+.tile--logos:hover img { transform: none; }
+.tile--logos.is-glitch img.is-on { animation: logoGlitch .26s steps(4) 1; }
 .tile::after {           /* the "washed out" veil */
   content: ""; position: absolute; inset: 0;
   background: rgba(255,255,255,var(--veil, 0));

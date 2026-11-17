@@ -312,7 +312,11 @@ window.SITE = {
             "media/initiatives/sonic-inclusion/logo-2.jpg"
           ],
           imageCaption: "Sonic Inclusion, logo variations",
-          tileFit: "contain",   // show the whole logo on the home page
+          // home page tile: white symbol on black, switching like the page
+          tileLogos: [
+            "media/initiatives/sonic-inclusion/symbol-1-dark.jpg",
+            "media/initiatives/sonic-inclusion/symbol-2-dark.jpg"
+          ],
           homeTitle: "Sonic Inclusion",
           homeMeta: "Co-founder · Berlin",
           website: { label: "sonicinclusion.com", url: "https://www.sonicinclusion.com" },
