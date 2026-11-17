@@ -221,15 +221,37 @@
           })
         });
         const out = await res.json().catch(() => ({}));
-        if (!res.ok || out.success === "false" || out.success === false) throw new Error(out.message || res.status);
+        if (!res.ok || out.success === "false" || out.success === false) {
+          // FormSubmit explains what is wrong (e.g. the form still needs activation)
+          status.textContent = out.message || `The message could not be sent (error ${res.status}).`;
+          return;
+        }
         form.reset();
         status.textContent = "Thank you, your message was sent.";
       } catch (err) {
-        status.textContent = "Sorry, the message could not be sent. Please try again later.";
+        // Network/CORS problem: fall back to a classic form post (FormSubmit's own page, then back here)
+        classicSubmit(cfg, data);
       } finally {
         btn.disabled = false;
       }
     });
+  }
+
+  function classicSubmit(cfg, data) {
+    const f = document.createElement("form");
+    f.method = "POST";
+    f.action = `https://formsubmit.co/${encodeURIComponent(cfg.to)}`;
+    const fields = {
+      email: data.email, message: data.message,
+      _subject: "New message from carlosvillamizar.net", _template: "box",
+      _next: location.href.split("#")[0] + "#contact"
+    };
+    for (const [k, v] of Object.entries(fields)) {
+      const i = document.createElement("input");
+      i.type = "hidden"; i.name = k; i.value = v; f.appendChild(i);
+    }
+    document.body.appendChild(f);
+    f.submit();
   }
 
   function closeArchive() {
