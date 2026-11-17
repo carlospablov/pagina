@@ -385,6 +385,10 @@ body.no-intro .tile { animation: none; opacity: 1; }
 .work__tools { margin-top: 1.4rem; color: #6f6f6f; }
 .work__credit { margin-top: 1.2rem; }
 
+/* gallery variant: one wide picture, then two side by side */
+.release__gallery.g-wide figure:nth-child(1) { grid-column: 1 / -1; margin-top: 0; }
+.release__gallery.g-wide figure:nth-child(n+2) { grid-column: span 3; margin-top: 0; align-self: end; }
+
 /* ---------- Audio player ---------- */
 .player {
   display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .4rem 1rem;

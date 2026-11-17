@@ -184,8 +184,11 @@ window.SITE = {
           location: "Berlin",
           image: "media/collaborations/ride-or-die/installation-view-kindl.jpg",
           thumb: "media/collaborations/ride-or-die/installation-view-kindl-720.jpg",
+          galleryLayout: "wide",
           gallery: [
-            { src: "media/collaborations/ride-or-die/installation-view-kindl.jpg", caption: "Installation view · KINDL, Berlin · Photo © Jens Ziehe, 2024" }
+            { src: "media/collaborations/ride-or-die/installation-view-kindl.jpg", caption: "Installation view · KINDL, Berlin · Photo © Jens Ziehe, 2024" },
+            { src: "media/collaborations/ride-or-die/projection-audience.jpg", caption: "Projection with visitors · KINDL, Berlin" },
+            { src: "media/collaborations/ride-or-die/kindl-exterior.jpg", caption: "KINDL – Zentrum für zeitgenössische Kunst, exterior · Photo © Marco Funke, 2019" }
           ],
           youtube: "yLcbI-uLZ7o",
           homeTitle: "RIDE OR DIE by Nina E. Schönefeld",

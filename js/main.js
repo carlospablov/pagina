@@ -425,7 +425,7 @@
         </div>
        </div>
         ${(it.gallery || []).length ? `
-          <div class="release__gallery" data-count="${it.gallery.length}">
+          <div class="release__gallery${it.galleryLayout ? " g-" + esc(it.galleryLayout) : ""}" data-count="${it.gallery.length}">
             ${it.gallery.map((g, i) => `
               <figure${g.youtube ? ' class="is-video"' : ""}>
                 ${g.youtube
