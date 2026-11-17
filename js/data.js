@@ -60,6 +60,8 @@ window.SITE = {
           },
           gallery: [
             { src: "media/works/naked-singularity/satellite-dish.jpg", caption: "Satellite dish and receiver" },
+            { src: "media/works/naked-singularity/floor-plan.jpg", caption: "Floor plan" },
+            { src: "media/works/naked-singularity/red-blue-light.jpg", caption: "Red and blue light" },
             { src: "media/works/naked-singularity/opening.jpg", caption: "Opening" }
           ],
           text: "An untuned radio frequency reveals the shadows of electromagnetic noise — residues of the cosmic background and of our own electronics. Built on a low-frequency sound system, the installation reproduces the sound of a hacked radio and of radio telescopes, tuned to an unused frequency. Passed through a filter-modulator unit, the signal radiates outward as abstract, processed radio waves.",
