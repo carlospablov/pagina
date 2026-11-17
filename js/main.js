@@ -415,6 +415,7 @@
           ${meta ? `<p class="release__meta">${meta}</p>` : ""}
           ${it.roles ? `<div class="release__side work__roles"><ol>${it.roles.map((r) => `<li><span class="work__role">${esc(r.role)}</span><span>${r.link ? `<a class="link" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name)}</span></li>`).join("")}</ol></div>` : ""}
           ${it.audio ? playerHTML(it.audio) : ""}
+          ${it.soundcloud ? `<iframe class="work__sc" title="${esc(it.title)} on SoundCloud" loading="lazy" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(it.soundcloud)}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>` : ""}
           <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}${it.textNote ? `<p class="work__note">${esc(it.textNote)}</p>` : ""}</div>
           ${it.tools ? `<p class="release__meta work__tools">TOOLS · ${esc(it.tools.toUpperCase())}</p>` : ""}
           ${it.specs ? `<p class="release__meta work__tools">WORK · ${esc(it.specs.toUpperCase())}</p>` : ""}

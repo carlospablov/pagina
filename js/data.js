@@ -182,9 +182,8 @@ window.SITE = {
           subtitle: "A record release curated by Research and Waves with Nicolás Rosero and Carlos Villamizar, exploring the concept of Transparency from cultural, creative and scientific perspectives.",
           year: 2019,
           location: "Berlin / Bremen",
-          // Images are linked from the Research and Waves website for now.
-          // To host them here, put the files in media/collaborations/transparencies/ and change the paths.
-          image: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_01_44d45366ee.jpg",
+          image: "media/collaborations/transparencies/record-cover.jpg",
+          soundcloud: "https://soundcloud.com/researchandwaves/sets/raw-0-4-y-0-75",
           imageCaption: "Record cover by Galina Kruzhilina",
           homeTitle: "Transparencies by Research and Waves",
           homeMeta: "Curator",
@@ -210,13 +209,12 @@ window.SITE = {
             "Cover: Galina Kruzhilina"
           ],
           creditsLabel: "Tracklist",
+          galleryLayout: "pairs",
           gallery: [
-            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_07_c49ed8cdde.JPG", caption: "Release weekend · feldfünf, Berlin" },
-            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_05_1db48064b4.JPG", caption: "Performance" },
-            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_09_dad76904ea.JPG", caption: "Audience" },
-            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_11_facb835f84.JPG", caption: "Workshop" },
-            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_08_2bac506432.JPG", caption: "Installation" },
-            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_02_58a0264e9b.JPG", caption: "Cover design" }
+            { src: "media/collaborations/transparencies/performance.jpg", caption: "Performance · release weekend, feldfünf, Berlin" },
+            { src: "media/collaborations/transparencies/lecture.jpg", caption: "Lecture · release weekend, feldfünf, Berlin" },
+            { src: "media/collaborations/transparencies/cover-print.jpg", caption: "Cover artwork, printed on fabric" },
+            { src: "media/collaborations/transparencies/window.jpg", caption: "feldfünf, Berlin" }
           ],
           credit: "Images: Research and Waves"
         },
