@@ -143,27 +143,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .stage { mix-blend-mode: difference; }
 #line { display: block; width: 100%; height: 100%; opacity: 0; animation: fadeIn 1.6s var(--ease) .6s forwards; }
 
-/* ---------- Measure mode ---------- */
-.tile__dim { display: none; }
-body.measure .tile { outline: 1px dashed rgba(0, 0, 0, .55); outline-offset: -1px; }
-body.measure .tile__dim {
-  display: block; position: absolute; top: 8px; left: 8px; z-index: 3;
-  font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase;
-  background: #fff; padding: 2px 5px; color: var(--ink);
-}
-#measureBtn[aria-pressed="true"] { color: var(--ultramarine); }
-.cursor-read {
-  position: fixed; z-index: 70; pointer-events: none; display: none;
-  font-family: var(--mono); font-size: 10px; color: var(--ink);
-  background: #fff; padding: 2px 5px; transform: translate(14px, 14px);
-}
-body.measure .cursor-read { display: block; }
-body.measure { cursor: crosshair; }
-.guide-x, .guide-y { position: fixed; z-index: 69; pointer-events: none; background: rgba(20, 42, 134, .35); display: none; }
-.guide-x { left: 0; right: 0; height: 1px; }
-.guide-y { top: 0; bottom: 0; width: 1px; }
-body.measure .guide-x, body.measure .guide-y { display: block; }
-
 /* ---------- Giant cropped mark ---------- */
 .mark {
   position: fixed; left: -0.035em; bottom: -0.2em;
@@ -176,17 +155,6 @@ body.measure .guide-x, body.measure .guide-y { display: block; }
 }
 .mark sup { font-size: .22em; vertical-align: top; position: relative; top: .55em; margin-left: .04em; letter-spacing: 0; }
 
-/* ---------- Bottom nav ---------- */
-.bottom {
-  position: fixed; right: calc(var(--strip) + var(--pad)); bottom: calc(var(--pad) * 1.1);
-  display: flex; gap: clamp(14px, 1.8vw, 28px);
-  font-size: 13px; z-index: 40;
-}
-.bottom a, .bottom button { transition: color .3s; }
-.bottom a:hover, .bottom button:hover { color: var(--grey); }
-.bottom > span { color: #6f6f6f; }
-body.is-open .top { background: #fff; }
-body.is-open .bottom { background: rgba(255,255,255,.92); padding: 6px 10px; margin: -6px -10px; }
 
 /* ---------- "Hi!" box ---------- */
 .hi {
@@ -430,8 +398,6 @@ body.is-open .mark, body.is-open .stage { opacity: 0 !important; transition: opa
 @media (max-width: 900px) {
   .top__nav { display: none; }
   .top__menu { display: block; }
-  .bottom { left: auto; font-size: 12px; gap: 12px; }
-  .bottom > span:last-child { display: none; }
   .detail__body { grid-template-columns: 1fr; }
   .release__top { grid-template-columns: 1fr; }
   .release__cover { position: static; }
@@ -441,7 +407,6 @@ body.is-open .mark, body.is-open .stage { opacity: 0 !important; transition: opa
 }
 
 @media (max-width: 560px) {
-  .bottom #clock { display: none; }
   .mark { font-size: 40vw; }
 }
 

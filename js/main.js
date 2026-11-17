@@ -92,7 +92,7 @@
           <span class="plus"><span class="link">+ More</span></span>
         </figcaption>`;
       tile.addEventListener("click", () => {
-        location.hash = item.ghost ? "#archive" : `#item/${item.section}/${item.index}`;
+        location.hash = item.ghost ? "#works" : `#item/${item.section}/${item.index}`;
       });
       collage.appendChild(tile);
     });
@@ -111,7 +111,7 @@
     [...thumbs, ...thumbs].forEach((t) => {
       const img = new Image();
       img.src = t.image; img.alt = "";
-      img.addEventListener("click", () => { location.hash = t.ghost ? "#archive" : `#item/${t.section}/${t.index}`; });
+      img.addEventListener("click", () => { location.hash = t.ghost ? "#works" : `#item/${t.section}/${t.index}`; });
       track.appendChild(img);
     });
     strip.innerHTML = ""; strip.appendChild(track);
@@ -133,8 +133,7 @@
      ======================================================= */
   const topNav = $("#topNav"), drawer = $("#drawer"), menuBtn = $("#menuBtn");
   topNav.innerHTML = SITE.sections.map((s) => `<a href="#${s.id}">${esc(s.title)}</a>`).join("");
-  drawer.innerHTML = SITE.sections.map((s) => `<a href="#${s.id}">${esc(s.title)}</a>`).join("") +
-    `<a href="#archive">Archive</a>`;
+  drawer.innerHTML = SITE.sections.map((s) => `<a href="#${s.id}">${esc(s.title)}</a>`).join("");
 
   function setDrawer(open) {
     drawer.classList.toggle("is-visible", open);
@@ -169,7 +168,6 @@
     $("#archiveTitle").textContent = title;
     $("#archiveCount").textContent = isText ? "" : items.length ? `(${items.length})` : "(0)";
     $("#archiveTabs").innerHTML =
-      `<a href="#archive" class="${!sec ? "is-active" : ""}">All</a>` +
       SITE.sections.map((s) => `<a href="#${s.id}" class="${sec && s.id === sec.id ? "is-active" : ""}">${esc(s.title)}</a>`).join("");
     $("#archiveFilters").innerHTML = isText ? "" : SITE.filters.map((f) => `<span class="link">+ ${esc(f)}</span>`).join("");
 
@@ -578,8 +576,8 @@
       if (openDetail(s, i)) { document.body.classList.add("is-open"); return; }
     }
     closeDetail();
-    if (h === "archive" || SITE.sections.some((s) => s.id === h)) {
-      openArchive(h === "archive" ? null : h);
+    if (SITE.sections.some((s) => s.id === h)) {
+      openArchive(h);
       document.body.classList.add("is-open");
       return;
     }
@@ -646,33 +644,8 @@
   }
 
   /* =======================================================
-     11. Measure mode: dimension labels, guides, cursor readout
+     11. Boot
      ======================================================= */
-  const measureBtn = $("#measureBtn"), cursorRead = $("#cursorRead");
-  const gx = document.createElement("div"), gy = document.createElement("div");
-  gx.className = "guide-x"; gy.className = "guide-y";
-  document.body.append(gx, gy);
-  measureBtn.addEventListener("click", () => {
-    const on = document.body.classList.toggle("measure");
-    measureBtn.setAttribute("aria-pressed", String(on));
-    updateSpecs();
-  });
-  addEventListener("pointermove", (e) => {
-    if (!document.body.classList.contains("measure")) return;
-    cursorRead.style.left = e.clientX + "px";
-    cursorRead.style.top = e.clientY + "px";
-    cursorRead.textContent = `X ${e.clientX} · Y ${e.clientY}`;
-    gx.style.top = e.clientY + "px";
-    gy.style.left = e.clientX + "px";
-  });
-
-  /* =======================================================
-     12. Clock, year, boot
-     ======================================================= */
-  const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Berlin", hour: "2-digit", minute: "2-digit", hour12: false });
-  const tick = () => { $("#clock").textContent = "Berlin " + fmt.format(new Date()); };
-  tick(); setInterval(tick, 10000);
-  $("#year").textContent = new Date().getFullYear();
 
   let lastNarrow = innerWidth < 900;
   addEventListener("resize", () => {
