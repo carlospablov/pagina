@@ -81,15 +81,53 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: #f3f3f1;
   cursor: pointer;
   opacity: 0;
-  animation: tileIn 1.4s var(--ease) forwards;
-  animation-delay: calc(var(--i) * 140ms);
+  /* 4 · tape transport: each picture is pulled in, overshoots a little and settles */
+  animation: tapeIn 1.5s cubic-bezier(.2, .7, .2, 1) forwards;
+  animation-delay: calc(var(--i) * 260ms + 150ms);
 }
-@keyframes tileIn { to { opacity: 1; } }
+@keyframes tapeIn {
+  0%   { opacity: 0; transform: translateX(-7%); filter: blur(6px); }
+  35%  { opacity: 1; filter: blur(1.5px); }
+  58%  { transform: translateX(1.4%); filter: blur(0); }
+  72%  { transform: translateX(-0.7%); }
+  84%  { transform: translateX(0.3%); }
+  93%  { transform: translateX(-0.1%); }
+  100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+body.no-intro .tile { animation: none; opacity: 1; }
 
 .tile img {
   width: 100%; height: 100%; object-fit: cover; display: block;
   transform: scale(1.06);
-  transition: transform 2.4s var(--ease), filter .8s var(--ease);
+  /* 3 · detuned: soft, faded, slightly drained of colour */
+  filter: blur(1.2px) saturate(.55) contrast(.9) brightness(1.04);
+  transition: transform 2.4s var(--ease), filter 1.6s var(--ease);
+}
+/* radio static over each picture */
+.tile__noise {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background-image: var(--noise); background-size: 220px 220px;
+  opacity: .42; mix-blend-mode: multiply;
+  transition: opacity 1.6s var(--ease);
+  animation: static .32s steps(1) infinite;
+}
+.tile__noise::after {     /* a faint scan band drifting down */
+  content: ""; position: absolute; left: 0; right: 0; height: 18%;
+  background: linear-gradient(transparent, rgba(255, 255, 255, .35), transparent);
+  animation: scan 4.5s linear infinite; animation-delay: calc(var(--i) * -1.3s);
+}
+@keyframes static {
+  0% { background-position: 0 0; } 25% { background-position: -73px 41px; }
+  50% { background-position: 59px -88px; } 75% { background-position: -31px -17px; }
+}
+@keyframes scan { from { top: -20%; } to { top: 100%; } }
+/* tuned in: hover (desktop) or .is-tuned (touch cycle) */
+.tile:hover img, .tile.is-tuned img { filter: none; transition: transform 2.4s var(--ease), filter .55s var(--ease); }
+.tile:hover .tile__noise, .tile.is-tuned .tile__noise { opacity: 0; transition: opacity .55s var(--ease); }
+.tile:hover img { animation: tuneIn .45s steps(6) 1; }
+@keyframes tuneIn {
+  0% { translate: 6px 0; } 20% { translate: -4px 0; } 40% { translate: 3px 0; }
+  60% { translate: -2px 0; } 80% { translate: 1px 0; } 100% { translate: 0 0; }
 }
 .tile::after {           /* the "washed out" veil */
   content: ""; position: absolute; inset: 0;
