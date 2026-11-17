@@ -404,7 +404,7 @@
        <div class="release__top">
         <div class="release__cover">
           ${media}
-          <span class="release__fig">FIG. 00 — ${it.youtube ? "VIDEO" : it.video ? esc((it.video.caption || "Video").toUpperCase()) : it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
+          <span class="release__fig">FIG. 00 — ${it.youtube ? esc((it.videoCaption || "Video").toUpperCase()) : it.video ? esc((it.video.caption || "Video").toUpperCase()) : it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
         </div>
         <div class="release__info">
           <p class="release__kicker">${sec.id === "collaborations" ? "COLLABORATION" : "WORK"} ${pad(n)} · ${esc((it.category || "").toUpperCase())}</p>
@@ -415,6 +415,7 @@
           ${it.audio ? playerHTML(it.audio) : ""}
           <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}${it.textNote ? `<p class="work__note">${esc(it.textNote)}</p>` : ""}</div>
           ${it.tools ? `<p class="release__meta work__tools">TOOLS · ${esc(it.tools.toUpperCase())}</p>` : ""}
+          ${it.specs ? `<p class="release__meta work__tools">WORK · ${esc(it.specs.toUpperCase())}</p>` : ""}
           ${it.research ? `<div class="release__text work__research"><p class="release__label">Research</p><p>${esc(it.research)}</p></div>` : ""}
           ${it.exhibitions ? `<div class="release__side work__shows">
               <p class="release__label">Presented at</p>

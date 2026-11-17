@@ -193,7 +193,8 @@ window.SITE = {
             { role: "Sound design & music supervision", name: "Carlos Villamizar" }
           ],
           text: "Nina E. Schönefeld's video installation RIDE OR DIE (2024), shown for the first time at KINDL, focuses on the moment of decision when relentless, radical resistance begins: against populist autocrats and the threat to the separation of powers and freedom of the press.",
-          tools: "HD video · 30:13 · black and white & colour · sound",
+          specs: "HD video · 30:13 · black and white & colour · sound",
+          videoCaption: "ZDF aspekte, report on the exhibition at KINDL",
           exhibitions: [
             { title: "KINDL – Zentrum für zeitgenössische Kunst, M1 VideoSpace", place: "Berlin", date: "Sep/2024 – Feb/2025" }
           ],
