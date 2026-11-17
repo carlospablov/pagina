@@ -176,6 +176,51 @@ window.SITE = {
       items: [
         {
           type: "work",
+          title: "Transparencies",
+          category: "Record release, event & exhibition",
+          medium: "Vinyl record, release event & exhibition · curation",
+          subtitle: "A record release curated by Research and Waves with Nicolás Rosero and Carlos Villamizar, exploring the concept of Transparency from cultural, creative and scientific perspectives.",
+          year: 2019,
+          location: "Berlin / Bremen",
+          // Images are linked from the Research and Waves website for now.
+          // To host them here, put the files in media/collaborations/transparencies/ and change the paths.
+          image: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_01_44d45366ee.jpg",
+          homeTitle: "Transparencies by Research and Waves",
+          homeMeta: "Curator",
+          roles: [
+            { role: "Curator", name: "Carlos Villamizar" },
+            { role: "Co-curators", name: "Research and Waves, Nicolás Rosero", link: "https://rawxyz.uber.space/projects/transparencies" },
+            { role: "Cover design", name: "Galina Kruzhilina" }
+          ],
+          text: "Featuring work by seven international artists, poets, scientists and designers, the record looks at the concept of Transparency from a variety of cultural, creative and scientific perspectives. In conversation with the curatorial team, six of the contributors synthesised their interpretation of the theme in a five-minute audio piece, many of them working with the medium for the first time. Conceived not only as an exhibition or media release but as a joint research effort, the project touches on human intimacy, financial trading and pseudo-science, the material qualities of the everyday, neuroscience and artificial intelligence, digital surveillance, communication and collectivity, and colonial histories and public space.",
+          textNote: "Text adapted from Research and Waves.",
+          exhibitions: [
+            { title: "Prelude I, Galerie Mitte im Kubo", place: "Bremen", date: "Dec/2018" },
+            { title: "Prelude II, feldfünf", place: "Berlin", date: "Jan/2019" },
+            { title: "Record release weekend, feldfünf", place: "Berlin", date: "Apr/2019" }
+          ],
+          credits: [
+            "Louise Vind Nielsen — The music stops, and now what's that?",
+            "Fritz Laszlo Weber — Creating the balance without a key",
+            "Patrick Cruz — Frisson",
+            "Jasmina Al-Qaisi — Applied tactics of self absolution",
+            "Sam Conran — Gann",
+            "Nicolás Gravel — Así es la life",
+            "Cover: Galina Kruzhilina"
+          ],
+          creditsLabel: "Tracklist",
+          gallery: [
+            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_07_c49ed8cdde.JPG", caption: "Release weekend · feldfünf, Berlin" },
+            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_05_1db48064b4.JPG", caption: "Performance" },
+            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_09_dad76904ea.JPG", caption: "Audience" },
+            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_11_facb835f84.JPG", caption: "Workshop" },
+            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_08_2bac506432.JPG", caption: "Installation" },
+            { src: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_02_58a0264e9b.JPG", caption: "Cover design" }
+          ],
+          credit: "Images: Research and Waves"
+        },
+        {
+          type: "work",
           title: "RIDE OR DIE",
           category: "Video installation",
           medium: "Video installation · sound & music",

@@ -52,20 +52,22 @@
      ======================================================= */
   // One tile per work / release. The bottom-left corner stays free for the CV mark.
   const LAYOUT_WIDE = [
-    { x: 0,  y: 0,  w: 34, h: 54, veil: 0 },
-    { x: 34, y: 0,  w: 30, h: 46, veil: 0.12 },
-    { x: 64, y: 0,  w: 36, h: 60, veil: 0 },
-    { x: 40, y: 54, w: 25, h: 46, veil: 0.08 },
-    { x: 66, y: 64, w: 18, h: 36, veil: 0.1 },
-    { x: 84, y: 64, w: 16, h: 30, veil: 0.1 }
+    { x: 0,  y: 0,  w: 30, h: 52, veil: 0 },
+    { x: 30, y: 0,  w: 24, h: 44, veil: 0 },
+    { x: 54, y: 0,  w: 22, h: 50, veil: 0 },
+    { x: 76, y: 0,  w: 24, h: 58, veil: 0 },
+    { x: 36, y: 50, w: 22, h: 50, veil: 0 },
+    { x: 59, y: 57, w: 20, h: 43, veil: 0 },
+    { x: 80, y: 62, w: 20, h: 38, veil: 0 }
   ];
   const LAYOUT_NARROW = [
-    { x: 0,  y: 0,  w: 52, h: 30, veil: 0 },
-    { x: 52, y: 0,  w: 48, h: 24, veil: 0.1 },
-    { x: 0,  y: 32, w: 46, h: 26, veil: 0 },
-    { x: 48, y: 27, w: 52, h: 31, veil: 0.1 },
-    { x: 56, y: 60, w: 44, h: 22, veil: 0.1 },
-    { x: 56, y: 84, w: 44, h: 16, veil: 0 }
+    { x: 0,  y: 0,  w: 52, h: 26, veil: 0 },
+    { x: 52, y: 0,  w: 48, h: 21, veil: 0 },
+    { x: 0,  y: 27, w: 46, h: 22, veil: 0 },
+    { x: 48, y: 22, w: 52, h: 27, veil: 0 },
+    { x: 0,  y: 50, w: 54, h: 19, veil: 0 },
+    { x: 56, y: 50, w: 44, h: 19, veil: 0 },
+    { x: 56, y: 70, w: 44, h: 14, veil: 0 }
   ];
 
   const collage = $("#collage");
@@ -421,7 +423,7 @@
               <p class="release__label">Presented at</p>
               <ol>${it.exhibitions.map((x) => `<li><span>${esc(x.title)} <em>— ${esc(x.place)}</em></span><i></i><b>${esc(x.date)}</b></li>`).join("")}</ol>
             </div>` : ""}
-          ${it.credits ? `<div class="release__credits"><p class="release__label">Credits</p>${it.credits.map((c) => `<p>${esc(c)}</p>`).join("")}</div>` : ""}
+          ${it.credits ? `<div class="release__credits"><p class="release__label">${esc(it.creditsLabel || "Credits")}</p>${it.credits.map((c) => `<p>${esc(c)}</p>`).join("")}</div>` : ""}
         </div>
        </div>
         ${(it.gallery || []).length ? `
