@@ -93,8 +93,8 @@
         <img src="${esc(src)}" alt="${esc(real ? real.title + (real.caption ? ", " + real.caption : "") : "")}">
         <span class="tile__dim"></span>
         <figcaption class="tile__cap">
-          <span>${esc(item.title)}, ${esc(item.year ?? "")}</span>
-          <span class="muted">${esc(item.type === "release" ? item.location : item.medium || item.location || "")}</span>
+          <span>${esc(item.homeTitle || item.title)}, ${esc(item.year ?? "")}</span>
+          <span class="muted">${esc(item.homeMeta || (item.type === "release" ? item.location : item.medium || item.location || ""))}</span>
           <span class="plus"><span class="link">+ More</span></span>
         </figcaption>`;
       tile.addEventListener("click", () => {

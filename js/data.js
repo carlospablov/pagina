@@ -184,7 +184,14 @@ window.SITE = {
           location: "Berlin",
           image: "media/collaborations/spectral-lures/dome-audience.jpg",
           thumb: "media/collaborations/spectral-lures/dome-audience-720.jpg",
-          youtube: "_F1qOQATaVA",
+          video: {
+            src: "media/collaborations/spectral-lures/spectral-lures-alte-muenze.mp4",
+            poster: "media/collaborations/spectral-lures/spectral-lures-poster.jpg",
+            caption: "Live at Alte Münze, Berlin · Oct 2025"
+          },
+          // how it is labelled on the home page
+          homeTitle: "Spectral Lures by Carlos.exe",
+          homeMeta: "Role: sound design",
           roles: [
             { role: "Concept & visuals", name: "Carlos Serrano", link: "https://cayequitas.com/#p-spectral-lures" },
             { role: "Sound design", name: "Carlos Villamizar" }
@@ -194,10 +201,9 @@ window.SITE = {
           tools: "TouchDesigner · Unreal Engine · Ableton Live · Elektron",
           exhibitions: [
             { title: "B-Dome", place: "RAW-Gelände, Berlin", date: "2025" },
-            { title: "Alte Münze", place: "Berlin", date: "2025" }
+            { title: "Alte Münze", place: "Berlin", date: "Oct/2025" }
           ],
           gallery: [
-            { youtube: "HLOeoYEUsDQ", caption: "Performance video" },
             { src: "media/collaborations/spectral-lures/dome-audience.jpg", caption: "Live in the dome · B-Dome, Berlin" },
             { src: "media/collaborations/spectral-lures/duo-live.jpg", caption: "Carlos.exe live" },
             { src: "media/collaborations/spectral-lures/dome-back-view.jpg", caption: "Under the dome · B-Dome, Berlin" },
