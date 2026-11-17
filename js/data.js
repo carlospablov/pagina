@@ -188,8 +188,7 @@ window.SITE = {
           homeTitle: "Transparencies by Research and Waves",
           homeMeta: "Curator",
           roles: [
-            { role: "Curator", name: "Carlos Villamizar" },
-            { role: "Co-curators", name: "Research and Waves, Nicolás Rosero", link: "https://rawxyz.uber.space/projects/transparencies" },
+            { role: "Curators", name: "Research and Waves, Nicolás Rosero, Carlos Villamizar", link: "https://rawxyz.uber.space/projects/transparencies" },
             { role: "Cover design", name: "Galina Kruzhilina" }
           ],
           text: "Featuring work by seven international artists, poets, scientists and designers, the record looks at the concept of Transparency from a variety of cultural, creative and scientific perspectives. In conversation with the curatorial team, six of the contributors synthesised their interpretation of the theme in a five-minute audio piece, many of them working with the medium for the first time. Conceived not only as an exhibition or media release but as a joint research effort, the project touches on human intimacy, financial trading and pseudo-science, the material qualities of the everyday, neuroscience and artificial intelligence, digital surveillance, communication and collectivity, and colonial histories and public space.",
