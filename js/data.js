@@ -180,7 +180,12 @@ window.SITE = {
           category: "Audiovisual live performance",
           medium: "Audiovisual live performance · sound design",
           subtitle: "An audiovisual live performance by Carlos.exe (Carlos Serrano), with sound design by Carlos Villamizar.",
-          // year: ,   ← add when known
+          year: 2025,
+          location: "Berlin",
+          exhibitions: [
+            { title: "B-Dome", place: "RAW-Gelände, Berlin", date: "2025" },
+            { title: "Alte Münze", place: "Berlin", date: "2025" }
+          ],
           // Images are linked from Carlos Serrano's site (cayequitas.com).
           // To host them here instead, put the files in media/collaborations/spectral-lures/ and change the paths.
           image: "https://cayequitas.com/assets/media/spectral-lures/07.webp",
