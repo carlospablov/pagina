@@ -10,7 +10,6 @@ css/style.css   all styling
 js/data.js      ← your content (sections, works, links)
 js/art.js       generated "sound images" used as placeholders
 js/main.js      interactions (collage, strip, archive, measure mode, routing)
-js/line.js      the plucked line across the middle of the home page
 media/          put your images / audio here (create when needed)
 ```
 

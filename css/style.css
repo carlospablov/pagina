@@ -133,16 +133,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .strip img:hover { filter: none; opacity: 1; }
 @keyframes stripScroll { to { transform: translateY(-50%); } }
 
-/* ---------- Centre: the line ---------- */
-.stage {
-  position: fixed; left: 0; right: var(--strip); top: 50%;
-  height: 120px; transform: translateY(-50%);
-  z-index: 10; pointer-events: none;
-}
-@keyframes fadeIn { to { opacity: 1; } }
-.stage { mix-blend-mode: difference; }
-#line { display: block; width: 100%; height: 100%; opacity: 0; animation: fadeIn 1.6s var(--ease) .6s forwards; }
-
 /* ---------- Giant cropped mark ---------- */
 .mark {
   position: fixed; left: -0.035em; bottom: -0.2em;
@@ -392,7 +382,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .lightbox__x { position: absolute; top: var(--pad); right: var(--pad); font-size: 13px; }
 
 /* when an overlay is open, calm the home page */
-body.is-open .mark, body.is-open .stage { opacity: 0 !important; transition: opacity .4s; }
+body.is-open .mark { opacity: 0 !important; transition: opacity .4s; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
