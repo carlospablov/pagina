@@ -304,7 +304,7 @@ body.is-open .bottom { background: rgba(255,255,255,.92); padding: 6px 10px; mar
 .textpage p { margin: 0 0 .9em; overflow-wrap: anywhere; }
 .textpage p.is-run { word-break: break-all; }
 .textpage p:last-child { margin-top: clamp(140px, 30vh, 340px); } /* the last line sits far below, on its own */ /* a line without spaces wraps as one piece */
-.textpage p:first-child { letter-spacing: .04em; }
+.textpage p:first-child { font-weight: 600; }
 
 /* ---------- Detail ---------- */
 .detail {
