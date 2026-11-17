@@ -212,6 +212,7 @@ body.measure .guide-x, body.measure .guide-y { display: block; }
 .bottom a, .bottom button { transition: color .3s; }
 .bottom a:hover, .bottom button:hover { color: var(--grey); }
 .bottom > span { color: #6f6f6f; }
+body.is-open .top { background: #fff; }
 body.is-open .bottom { background: rgba(255,255,255,.92); padding: 6px 10px; margin: -6px -10px; }
 
 /* ---------- "Hi!" box ---------- */
@@ -301,7 +302,8 @@ body.is-open .bottom { background: rgba(255,255,255,.92); padding: 6px 10px; mar
   letter-spacing: .005em;
 }
 .textpage p { margin: 0 0 .9em; overflow-wrap: anywhere; }
-.textpage p.is-run { word-break: break-all; } /* a line without spaces wraps as one piece */
+.textpage p.is-run { word-break: break-all; }
+.textpage p:last-child { margin-top: clamp(140px, 30vh, 340px); } /* the last line sits far below, on its own */ /* a line without spaces wraps as one piece */
 .textpage p:first-child { letter-spacing: .04em; }
 
 /* ---------- Detail ---------- */
