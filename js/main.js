@@ -56,18 +56,20 @@
     { x: 30, y: 0,  w: 24, h: 44, veil: 0 },
     { x: 54, y: 0,  w: 22, h: 50, veil: 0 },
     { x: 76, y: 0,  w: 24, h: 58, veil: 0 },
-    { x: 36, y: 50, w: 22, h: 50, veil: 0 },
-    { x: 59, y: 57, w: 20, h: 43, veil: 0 },
-    { x: 80, y: 62, w: 20, h: 38, veil: 0 }
+    { x: 34, y: 50, w: 19, h: 50, veil: 0 },
+    { x: 54, y: 55, w: 16, h: 45, veil: 0 },
+    { x: 71, y: 61, w: 15, h: 39, veil: 0 },
+    { x: 87, y: 59, w: 13, h: 41, veil: 0 }
   ];
   const LAYOUT_NARROW = [
-    { x: 0,  y: 0,  w: 52, h: 26, veil: 0 },
-    { x: 52, y: 0,  w: 48, h: 21, veil: 0 },
-    { x: 0,  y: 27, w: 46, h: 22, veil: 0 },
-    { x: 48, y: 22, w: 52, h: 27, veil: 0 },
-    { x: 0,  y: 50, w: 54, h: 19, veil: 0 },
-    { x: 56, y: 50, w: 44, h: 19, veil: 0 },
-    { x: 56, y: 70, w: 44, h: 14, veil: 0 }
+    { x: 0,  y: 0,  w: 52, h: 24, veil: 0 },
+    { x: 52, y: 0,  w: 48, h: 19, veil: 0 },
+    { x: 0,  y: 25, w: 46, h: 20, veil: 0 },
+    { x: 48, y: 20, w: 52, h: 25, veil: 0 },
+    { x: 0,  y: 46, w: 54, h: 18, veil: 0 },
+    { x: 56, y: 46, w: 44, h: 18, veil: 0 },
+    { x: 0,  y: 65, w: 42, h: 15, veil: 0 },
+    { x: 44, y: 65, w: 56, h: 19, veil: 0 }
   ];
 
   const collage = $("#collage");
@@ -89,7 +91,7 @@
       const item = real;
       const src = real.src;
       const tile = document.createElement("figure");
-      tile.className = "tile";
+      tile.className = "tile" + (item.tileFit === "contain" ? " tile--contain" : "");
       tile.style.cssText = `left:${L.x}%;top:${L.y}%;width:${L.w}%;height:${L.h}%;--veil:${L.veil};--i:${i}`;
       tile.innerHTML = `
         <img src="${esc(src)}" alt="${esc(real ? real.title + (real.caption ? ", " + real.caption : "") : "")}">
@@ -389,7 +391,9 @@
   function openWork(it, sec) {
     const n = sec.items.indexOf(it) + 1;
     const meta = [it.year, it.location].filter(Boolean).map(esc).join(" · ");
-    const media = it.youtube
+    const media = it.logos
+      ? `<div class="work__logos" id="workLogos">${it.logos.map((l, i) => `<img src="${esc(l)}" alt="${esc(it.title)} logo"${i ? "" : ' class="is-on"'}>`).join("")}<span class="work__logos-hint">click to switch</span></div>`
+      : it.youtube
       ? `<div class="work__yt"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.youtube)}?rel=0" title="${esc(it.title)} — video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`
       : it.video
       ? `<div class="work__video">
@@ -406,10 +410,10 @@
        <div class="release__top">
         <div class="release__cover">
           ${media}
-          <span class="release__fig">FIG. 00 — ${it.youtube ? esc((it.videoCaption || "Video").toUpperCase()) : it.video ? esc((it.video.caption || "Video").toUpperCase()) : it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
+          <span class="release__fig">FIG. 00 — ${it.logos ? esc((it.imageCaption || "Logo").toUpperCase()) : it.youtube ? esc((it.videoCaption || "Video").toUpperCase()) : it.video ? esc((it.video.caption || "Video").toUpperCase()) : it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
         </div>
         <div class="release__info">
-          <p class="release__kicker">${sec.id === "collaborations" ? "COLLABORATION" : "WORK"} ${pad(n)} · ${esc((it.category || "").toUpperCase())}</p>
+          <p class="release__kicker">${sec.id === "collaborations" ? "COLLABORATION" : sec.id === "initiatives" ? "INITIATIVE" : "WORK"} ${pad(n)} · ${esc((it.category || "").toUpperCase())}</p>
           <h3 class="release__title">${esc(it.title)}</h3>
           ${it.subtitle ? `<p class="work__subtitle">${esc(it.subtitle)}</p>` : ""}
           ${meta ? `<p class="release__meta">${meta}</p>` : ""}
@@ -417,6 +421,15 @@
           ${it.audio ? playerHTML(it.audio) : ""}
           ${it.soundcloud ? `<iframe class="work__sc" title="${esc(it.title)} on SoundCloud" loading="lazy" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(it.soundcloud)}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>` : ""}
           <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}${it.textNote ? `<p class="work__note">${esc(it.textNote)}</p>` : ""}</div>
+          ${it.website ? `<p class="release__links"><a class="link" href="${esc(it.website.url)}" target="_blank" rel="noopener">+ ${esc(it.website.label)}</a></p>` : ""}
+          ${it.programme ? `<div class="work__programme">
+              <p class="release__label">Festival</p>
+              <h4 class="work__prog-title">${esc(it.programme.title)}</h4>
+              ${it.programme.intro ? `<p class="work__prog-intro">${esc(it.programme.intro)}</p>` : ""}
+              <ol class="work__prog-list">${it.programme.events.map((ev) => `
+                <li><span class="work__prog-date">${esc(ev.date)}</span><span class="work__prog-what"><b>${esc(ev.title)}</b><em>${esc(ev.people)}</em><i>${esc(ev.place)}</i></span></li>`).join("")}
+              </ol>
+            </div>` : ""}
           ${it.tools ? `<p class="release__meta work__tools">TOOLS · ${esc(it.tools.toUpperCase())}</p>` : ""}
           ${it.specs ? `<p class="release__meta work__tools">WORK · ${esc(it.specs.toUpperCase())}</p>` : ""}
           ${it.research ? `<div class="release__text work__research"><p class="release__label">Research</p><p>${esc(it.research)}</p></div>` : ""}
@@ -443,6 +456,7 @@
       b.addEventListener("click", () => openLightbox(b.dataset.src, b.querySelector("img").alt)));
     if (!it.image && it.visual === "static") startRadio($("#workRadio"));
     if (it.audio) wirePlayer(it.audio);
+    if (it.logos) startLogos();
     if (it.video) {
       const v = $("#workVideo"), b = $("#workSound");
       b.addEventListener("click", () => {
@@ -520,6 +534,23 @@
     if (v) { v.pause(); v.muted = true; }
     if (player) cancelAnimationFrame(player);
     player = null;
+  }
+
+  // Logo variations: switch like a flickering signal, every few seconds or on click
+  let logoTimer = null;
+  function startLogos() {
+    clearInterval(logoTimer);
+    const box = $("#workLogos"); if (!box) return;
+    const imgs = [...box.querySelectorAll("img")];
+    let k = 0;
+    const flip = () => {
+      k = (k + 1) % imgs.length;
+      box.classList.add("is-glitch");
+      setTimeout(() => { imgs.forEach((im, j) => im.classList.toggle("is-on", j === k)); }, 90);
+      setTimeout(() => box.classList.remove("is-glitch"), 260);
+    };
+    box.addEventListener("click", flip);
+    logoTimer = setInterval(() => { if (!detail.classList.contains("is-visible")) clearInterval(logoTimer); else flip(); }, 2600);
   }
 
   // A slowly scrolling 'waterfall' of radio noise: grain + faint drifting carriers

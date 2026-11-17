@@ -101,6 +101,9 @@ body.no-intro .tile { animation: none; opacity: 1; }
   transform: scale(1.06);
   transition: transform 2.4s var(--ease);
 }
+.tile--contain { background: #fff; outline: 1px solid #e6e6e6; outline-offset: -1px; }
+.tile--contain img { object-fit: contain; padding: 6% 8% 34%; transform: none; }
+.tile--contain:hover img { transform: none; }
 .tile::after {           /* the "washed out" veil */
   content: ""; position: absolute; inset: 0;
   background: rgba(255,255,255,var(--veil, 0));
@@ -391,6 +394,30 @@ body.no-intro .tile { animation: none; opacity: 1; }
 
 .work__sc { display: block; width: 100%; height: 340px; border: 0; margin-top: 1.8rem; }
 .release__gallery.g-pairs figure:nth-child(n) { grid-column: span 3; margin-top: 0; align-self: end; }
+
+/* ---------- Initiative: logos + festival programme ---------- */
+.work__logos { position: relative; aspect-ratio: 1; background: #fff; border: 1px solid #e6e6e6; cursor: pointer; overflow: hidden; }
+.work__logos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
+.work__logos img.is-on { opacity: 1; }
+.work__logos.is-glitch img.is-on { animation: logoGlitch .26s steps(4) 1; }
+@keyframes logoGlitch {
+  0% { transform: translateX(0); clip-path: inset(0 0 0 0); }
+  25% { transform: translateX(-6px); clip-path: inset(20% 0 45% 0); }
+  50% { transform: translateX(5px); clip-path: inset(55% 0 10% 0); }
+  75% { transform: translateX(-2px); clip-path: inset(0 0 70% 0); }
+  100% { transform: translateX(0); clip-path: inset(0 0 0 0); }
+}
+.work__logos-hint { position: absolute; right: 10px; bottom: 8px; font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: #b0b0b0; }
+.work__programme { margin-top: 2.4rem; border-top: 1px solid var(--ink); padding-top: 1rem; }
+.work__prog-title { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3vw, 44px); line-height: 1; }
+.work__prog-intro { margin-top: .8rem; font-size: 14px; line-height: 1.55; color: #444; max-width: 36rem; }
+.work__prog-list { list-style: none; margin-top: 1.2rem; }
+.work__prog-list li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid #ececec; }
+.work__prog-date { font-family: var(--mono); font-size: 11px; color: #6f6f6f; padding-top: 2px; }
+.work__prog-what { display: flex; flex-direction: column; gap: .15rem; font-size: 14px; }
+.work__prog-what b { font-weight: 500; }
+.work__prog-what em { font-style: normal; }
+.work__prog-what i { font-style: normal; color: #6f6f6f; font-size: 13px; }
 
 /* ---------- Audio player ---------- */
 .player {

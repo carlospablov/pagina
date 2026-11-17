@@ -296,6 +296,43 @@ window.SITE = {
       ]
     },
     {
+      id: "initiatives", title: "Initiatives",
+      items: [
+        {
+          type: "work",
+          title: "Sonic Inclusion",
+          category: "Gallery & laboratory",
+          medium: "Gallery & laboratory for sound",
+          subtitle: "A Berlin-based gallery and laboratory where art, science and society intersect and are reimagined through sound.",
+          year: 2026,
+          location: "Berlin",
+          image: "media/initiatives/sonic-inclusion/logo-1.jpg",
+          logos: [
+            "media/initiatives/sonic-inclusion/logo-1.jpg",
+            "media/initiatives/sonic-inclusion/logo-2.jpg"
+          ],
+          imageCaption: "Sonic Inclusion, logo variations",
+          tileFit: "contain",   // show the whole logo on the home page
+          homeTitle: "Sonic Inclusion",
+          homeMeta: "Co-founder · Berlin",
+          website: { label: "sonicinclusion.com", url: "https://www.sonicinclusion.com" },
+          roles: [
+            { role: "Co-founders", name: "Kate Andriienko, Carlos Villamizar" }
+          ],
+          text: "Sonic Inclusion is a Berlin-based gallery and laboratory where art, science and society intersect and are reimagined through sound. Rooted in an antidisciplinary approach, the space invites creators from diverse fields (artists, technologists, scientists, designers, choreographers, writers and more) to collaborate beyond the boundaries of traditional disciplines. Exhibitions function as working labs: live prototypes, visible signal flows, sound pressure logs, captioned audio, spectrograms, tactile interfaces and facilitated feedback. Each show evolves during its run, and every project publishes open methods so others can reuse and build upon the work.",
+          programme: {
+            title: "Signal Cultures",
+            intro: "Signal Cultures is the first festival series initiated by Sonic Inclusion, exploring sound as a medium of artistic, technological and social inquiry. Across three editions at independent venues in Berlin, concerts, performances and installations opened a space for exchange between artists, researchers, technologists and a wide audience.",
+            events: [
+              { title: "Volume I — Electronic ambient concert", people: "Croatian Amor, Nexcyia, Mu_tate, Carlos Villamizar, Èvia", place: "Studio db, Berlin", date: "21.02.2026" },
+              { title: "Volume II — Electroacoustic concert", people: "Mazen Kerbaj, Gibrana Cervantes", place: "Morphine Raum, Berlin", date: "12.03.2026" },
+              { title: "Volume III — Installation", people: "Interspecifics (Leslie García, Paloma López)", place: "New Fears Gallery, Berlin", date: "17.04.2026" }
+            ]
+          }
+        }
+      ]
+    },
+    {
       id: "about", title: "About", items: [],
       // Shown exactly as written: one entry per line.
       text: [
