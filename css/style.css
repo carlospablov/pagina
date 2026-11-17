@@ -147,7 +147,7 @@ body.no-intro .tile { animation: none; opacity: 1; }
 .mark {
   position: fixed; left: -0.035em; bottom: -0.2em;
   font-family: var(--serif);
-  font-size: clamp(140px, 23vw, 420px);
+  font-size: clamp(110px, 17vw, 310px);
   line-height: 1; letter-spacing: -0.04em;
   z-index: 20; color: #fff;
   mix-blend-mode: difference;   /* black on light images, white on dark ones */
@@ -438,7 +438,7 @@ body.is-open .mark { opacity: 0 !important; transition: opacity .4s; }
 }
 
 @media (max-width: 560px) {
-  .mark { font-size: 40vw; }
+  .mark { font-size: 30vw; }
 }
 
 @media (prefers-reduced-motion: reduce) {
