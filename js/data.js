@@ -182,8 +182,11 @@ window.SITE = {
           subtitle: "A video installation by Nina E. Schönefeld, with sound design and music supervision by Carlos Villamizar.",
           year: 2024,
           location: "Berlin",
-          // Temporary picture: the YouTube preview frame. Replace with the KINDL photos when they arrive.
-          image: "https://i.ytimg.com/vi/yLcbI-uLZ7o/maxresdefault.jpg",
+          image: "media/collaborations/ride-or-die/installation-view-kindl.jpg",
+          thumb: "media/collaborations/ride-or-die/installation-view-kindl-720.jpg",
+          gallery: [
+            { src: "media/collaborations/ride-or-die/installation-view-kindl.jpg", caption: "Installation view · KINDL, Berlin · Photo © Jens Ziehe, 2024" }
+          ],
           youtube: "yLcbI-uLZ7o",
           homeTitle: "RIDE OR DIE by Nina E. Schönefeld",
           homeMeta: "Sound design & music supervision",
