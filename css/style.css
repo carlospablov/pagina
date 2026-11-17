@@ -306,6 +306,23 @@ body.is-open .bottom { background: rgba(255,255,255,.92); padding: 6px 10px; mar
 .textpage p:last-child { margin-top: clamp(140px, 30vh, 340px); } /* the last line sits far below, on its own */ /* a line without spaces wraps as one piece */
 .textpage p:first-child { font-weight: 600; }
 
+/* ---------- Contact form ---------- */
+.contact { max-width: 46rem; font-size: clamp(16px, 1.4vw, 20px); }
+.contact__field { display: block; margin-bottom: 2.2rem; }
+.contact__field span { display: block; font-size: 13px; color: #6f6f6f; margin-bottom: .3rem; }
+.contact input, .contact textarea {
+  width: 100%; font: inherit; color: var(--ink); background: transparent;
+  border: 0; border-bottom: 1px solid var(--ink); border-radius: 0;
+  padding: .3rem 0; outline: none; resize: vertical;
+}
+.contact textarea { border: 1px solid var(--ink); padding: .7rem .8rem; line-height: 1.45; }
+.contact input:focus, .contact textarea:focus { border-color: var(--ultramarine); }
+.contact__row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.contact__status { font-size: 13px; color: #6f6f6f; margin: 0; }
+.contact .pill { font-size: 14px; padding: 7px 16px; }
+.contact .pill:disabled { opacity: .5; cursor: wait; }
+.contact__honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
 /* ---------- Detail ---------- */
 .detail {
   position: fixed; inset: 0; right: var(--strip); z-index: 45; background: #fff;

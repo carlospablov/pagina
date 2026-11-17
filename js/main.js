@@ -146,7 +146,7 @@
     const items = sec ? sec.items.map((it, i) => ({ ...it, section: sec.id, index: i })) : allItems;
     const title = sec ? sec.title : "Archive";
 
-    const isText = !!(sec && sec.text);
+    const isText = !!(sec && (sec.text || sec.form));
     $("#archiveTitle").textContent = title;
     $("#archiveCount").textContent = isText ? "" : items.length ? `(${items.length})` : "(0)";
     $("#archiveTabs").innerHTML =
@@ -155,7 +155,9 @@
     $("#archiveFilters").innerHTML = isText ? "" : SITE.filters.map((f) => `<span class="link">+ ${esc(f)}</span>`).join("");
 
     let html;
-    if (isText) {
+    if (sec && sec.form) {
+      html = contactFormHTML();
+    } else if (isText) {
       html = `<div class="textpage">${sec.text.map((line) => `<p${/\s/.test(line) ? "" : ' class="is-run"'}>${esc(line)}</p>`).join("")}</div>`;
     } else if (items.length) {
       html = items.map(cardHTML).join("");
@@ -170,12 +172,64 @@
     const grid = $("#archiveGrid");
     grid.classList.toggle("is-text", isText);
     grid.innerHTML = html;
+    if (sec && sec.form) wireContactForm(sec.form);
 
     archive.classList.add("is-visible");
     archive.setAttribute("aria-hidden", "false");
     archive.scrollTop = 0;
     document.title = `${title} — Carlos Villamizar`;
     [...topNav.children].forEach((a) => a.classList.toggle("is-active", sec && a.getAttribute("href") === "#" + sec.id));
+  }
+
+  /* ---------- Contact form (FormSubmit) ---------- */
+  function contactFormHTML() {
+    return `
+      <form class="contact" id="contactForm" novalidate>
+        <label class="contact__field">
+          <span>Your email</span>
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+        <label class="contact__field contact__field--msg">
+          <span>Message</span>
+          <textarea name="message" rows="7" required></textarea>
+        </label>
+        <input type="text" name="_honey" class="contact__honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="contact__row">
+          <p class="contact__status" id="contactStatus" role="status"></p>
+          <button class="pill" type="submit">+ Send</button>
+        </div>
+      </form>`;
+  }
+
+  function wireContactForm(cfg) {
+    const form = $("#contactForm"), status = $("#contactStatus");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      if (data._honey) return;                       // bots fill the hidden field
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || "")) { status.textContent = "Please enter a valid email."; return; }
+      if (!(data.message || "").trim()) { status.textContent = "Please write a message."; return; }
+      const btn = form.querySelector("button");
+      btn.disabled = true; status.textContent = "Sending…";
+      try {
+        const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(cfg.to)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            email: data.email, message: data.message,
+            _subject: "New message from carlosvillamizar.net", _template: "box", _captcha: "false"
+          })
+        });
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok || out.success === "false" || out.success === false) throw new Error(out.message || res.status);
+        form.reset();
+        status.textContent = "Thank you, your message was sent.";
+      } catch (err) {
+        status.textContent = "Sorry, the message could not be sent. Please try again later.";
+      } finally {
+        btn.disabled = false;
+      }
+    });
   }
 
   function closeArchive() {

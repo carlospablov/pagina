@@ -54,7 +54,14 @@ window.SITE = {
         "-Worksbasedontemporalandspatialmannersrelatedtosound."
       ]
     },
-    { id: "contact",  title: "Contact",  items: [] }
+    {
+      id: "contact", title: "Contact", items: [],
+      // Contact form. Messages are forwarded to this address by FormSubmit
+      // (formsubmit.co). The first message triggers an activation email that
+      // must be confirmed once. After that, FormSubmit offers a random alias:
+      // put it here instead of the address to keep the email out of the page.
+      form: { to: "sonicinclusion@gmail.com" }
+    }
   ],
 
   filters: ["Year", "Medium", "Location", "Categories", "Latest"]
