@@ -32,13 +32,6 @@ window.SITE = {
     instagram: ""    // e.g. "https://instagram.com/…"
   },
 
-  // Caption under the blue panorama on the home page
-  hero: {
-    title: "Study for a listening landscape",
-    year: 2026,
-    meta: "Generative sound drawing, Berlin, Germany"
-  },
-
   // Show the "Hi!" box on first visit
   greeting: true,
 

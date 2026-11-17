@@ -129,13 +129,13 @@ window.Art = (() => {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h * (0.5 + r() * 0.5)); ctx.stroke();
     },
 
-    // ultramarine ridges: a still of the panorama
+    // ultramarine ridges: layered mountain lines
     ridges(ctx, w, h, r) {
       drawRidges(ctx, w, h, r() * 100, 0, -1, 0, Math.floor(r() * 1e6));
     }
   };
 
-  // Shared by the still image and the animated panorama
+  // Draws the ultramarine ridges
   function drawRidges(ctx, w, h, t, energy = 0, mx = -1, panels = 6, seed = 7) {
     const r = rng(seed);
     const bg = ctx.createLinearGradient(0, 0, 0, h);

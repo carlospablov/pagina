@@ -9,7 +9,7 @@ index.html      page skeleton
 css/style.css   all styling
 js/data.js      ← your content (sections, works, links)
 js/art.js       generated "sound images" used as placeholders
-js/main.js      interactions (collage, panorama, sound, archive, routing)
+js/main.js      interactions (collage, strip, archive, measure mode, routing)
 media/          put your images / audio here (create when needed)
 ```
 
@@ -29,7 +29,7 @@ Edit only `js/data.js`. Each section (Works, Sound, Exhibitions, Events, Texts, 
 }
 ```
 
-Empty sections show a "Forthcoming" state automatically. Until you add items with an `image`, the home collage and the right strip show generated placeholders (spectrograms, waveforms, Chladni and Lissajous figures). Your real images replace them automatically. Change the caption under the blue panorama in `hero`. Add your email and Instagram in `artist` and they appear in the menu.
+Empty sections show a "Forthcoming" state automatically. Until you add items with an `image`, the home collage and the right strip show generated placeholders (spectrograms, waveforms, Chladni and Lissajous figures). Your real images replace them automatically. Add your email and Instagram in `artist` and they appear in the menu.
 
 To rename, add or remove menu sections, edit the `sections` list. Each `id` becomes the URL (`/#works`).
 

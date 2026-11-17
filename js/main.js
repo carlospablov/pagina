@@ -14,135 +14,6 @@
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* =======================================================
-     1. Sound: only the blue landscape makes sound.
-        Everything runs through a distortion stage whose
-        drive follows the mouse over the panorama.
-     ======================================================= */
-  const Sound = {
-    ctx: null, on: false, input: null, drive: null, tone: null, analyser: null, drone: null,
-    state: { f: 0, drive: 2, lp: 1400 },
-    scale: [55, 65.41, 73.42, 82.41, 98, 110, 130.81, 146.83, 164.81, 196, 220],
-
-    curve(amount) {
-      const n = 2048, c = new Float32Array(n);
-      for (let i = 0; i < n; i++) {
-        const x = (i * 2) / n - 1;
-        c[i] = ((1 + amount) * x) / (1 + amount * Math.abs(x)); // soft-clip
-      }
-      return c;
-    },
-
-    init() {
-      if (this.ctx) return true;
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return false;
-      const c = (this.ctx = new AC());
-
-      // input -> drive -> fuzz -> crunch -> tone -> out (+ dark echo)
-      this.input = c.createGain(); this.input.gain.value = 0.6;
-      this.drive = c.createGain(); this.drive.gain.value = 3;
-      const fuzz = c.createWaveShaper(); fuzz.curve = this.curve(60); fuzz.oversample = "4x";
-      const crunch = c.createWaveShaper(); crunch.curve = this.curve(8);
-      this.tone = c.createBiquadFilter(); this.tone.type = "lowpass"; this.tone.frequency.value = 1400; this.tone.Q.value = 6;
-      const out = c.createGain(); out.gain.value = 0.16;
-      this.analyser = c.createAnalyser(); this.analyser.fftSize = 512;
-
-      const delay = c.createDelay(2); delay.delayTime.value = 0.33;
-      const fb = c.createGain(); fb.gain.value = 0.48;
-      const dark = c.createBiquadFilter(); dark.type = "lowpass"; dark.frequency.value = 900;
-
-      this.input.connect(this.drive).connect(fuzz).connect(crunch).connect(this.tone).connect(out);
-      out.connect(this.analyser).connect(c.destination);
-      out.connect(delay); delay.connect(dark); dark.connect(fb); fb.connect(delay); dark.connect(this.analyser);
-      return true;
-    },
-
-    start() {
-      if (!this.init()) return false;
-      this.on = true;
-      if (this.ctx.state === "suspended") this.ctx.resume();
-      return true;
-    },
-
-    // mouse over the landscape bends the sound: x opens the filter, speed adds drive
-    shape(x01, energy) {
-      if (!this.ctx) return;
-      const t = this.ctx.currentTime;
-      this.state.lp = 250 + x01 * x01 * 4200;
-      this.state.drive = 2 + energy * 40;
-      this.tone.frequency.setTargetAtTime(this.state.lp, t, 0.08);
-      this.drive.gain.setTargetAtTime(this.state.drive, t, 0.06);
-    },
-
-    hit(freq) {
-      if (!this.on) return;
-      this.state.f = freq;
-      const c = this.ctx, t = c.currentTime;
-      const env = c.createGain();
-      env.gain.setValueAtTime(0, t);
-      env.gain.linearRampToValueAtTime(0.9, t + 0.005);
-      env.gain.exponentialRampToValueAtTime(0.0001, t + 2.8);
-      env.connect(this.input);
-      [[1, "sawtooth", 0], [1.5, "square", 9], [0.5, "sawtooth", -7]].forEach(([m, type, det]) => {
-        const o = c.createOscillator();
-        o.type = type; o.frequency.setValueAtTime(freq * m * 1.04, t);
-        o.frequency.exponentialRampToValueAtTime(freq * m, t + 0.25); // pitch dive
-        o.detune.value = det; o.connect(env); o.start(t); o.stop(t + 3);
-      });
-      // crackle
-      const len = c.sampleRate * 0.25, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
-      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.15));
-      const n = c.createBufferSource(); n.buffer = buf;
-      const ng = c.createGain(); ng.gain.value = 0.5; n.connect(ng).connect(this.input); n.start(t);
-    },
-
-    note(i) { const s = this.scale; return s[((i % s.length) + s.length) % s.length]; },
-
-    startDrone() {
-      if (!this.on || this.drone) return;
-      const c = this.ctx, t = c.currentTime;
-      const g = c.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.5, t + 2.5);
-      const lfo = c.createOscillator(), lfoG = c.createGain();
-      lfo.frequency.value = 0.11; lfoG.gain.value = 18; lfo.connect(lfoG); lfo.start();
-      const oscs = [41.2, 55, 61.7, 82.4, 110.2].map((f, i) => {
-        const o = c.createOscillator(), og = c.createGain();
-        o.type = i % 2 ? "square" : "sawtooth"; o.frequency.value = f; o.detune.value = (i - 2) * 7;
-        lfoG.connect(o.detune);
-        og.gain.value = 0.3 / (i + 1); o.connect(og).connect(g); o.start(); return o;
-      });
-      g.connect(this.input);
-      this.drone = { g, oscs, lfo };
-      if (!this.state.f) this.state.f = 41.2;
-    },
-
-    stopDrone() {
-      if (!this.drone) return;
-      const { g, oscs, lfo } = this.drone, t = this.ctx.currentTime;
-      g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t);
-      g.gain.linearRampToValueAtTime(0, t + 1.2);
-      setTimeout(() => { oscs.forEach((o) => o.stop()); lfo.stop(); }, 1400);
-      this.drone = null;
-    },
-
-    level() {
-      if (!this.analyser || !this.on) return 0;
-      const a = new Uint8Array(this.analyser.fftSize);
-      this.analyser.getByteTimeDomainData(a);
-      let s = 0; for (const v of a) s += ((v - 128) / 128) ** 2;
-      return Math.min(1, Math.sqrt(s / a.length) * 4);
-    }
-  };
-
-  const listenBtn = $("#listenBtn");
-  function setListening(on) {
-    if (on) { Sound.start(); Sound.startDrone(); }
-    else Sound.stopDrone();
-    listenBtn.textContent = on ? "– Stop" : "+ Listen";
-    listenBtn.classList.toggle("is-on", on);
-  }
-  listenBtn.addEventListener("click", () => setListening(!Sound.drone));
-
-  /* =======================================================
      2. Content: real items first, generated placeholders after
      ======================================================= */
   const allItems = [];
@@ -151,7 +22,7 @@
 
   const PLACEHOLDER_NAMES = {
     spectrogram: "Spectrogram study", haze: "Room tone", chladni: "Chladni figure",
-    waveform: "Waveform", lissajous: "Lissajous figure", ridges: "Listening landscape"
+    waveform: "Waveform", lissajous: "Lissajous figure", ridges: "Landscape"
   };
 
   function placeholder(n, w, h) {
@@ -228,74 +99,15 @@
   }
 
   /* =======================================================
-     5. The panorama: ultramarine ridges drawn by sound
+     5. Tile dimensions (shown in Measure mode)
      ======================================================= */
-  const pano = $("#pano"), pctx = pano.getContext("2d");
-  let PW = 0, PH = 0;
-  const pm = { x: -1, tx: -1, energy: 0 };
-
-  function sizePano() {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    const r = pano.getBoundingClientRect();
-    PW = Math.round(r.width); PH = Math.round(r.height);
-    pano.width = PW * dpr; pano.height = PH * dpr;
-    pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    updateSpecs();
-  }
-
-  /* technical-drawing annotations */
-  const specW = $("#specW"), specPanels = $("#specPanels"), specRead = $("#specRead");
   function updateSpecs() {
-    specW.textContent = `W = ${PW} · FLUID`;
-    specPanels.innerHTML = Array.from({ length: 7 }, (_, i) => {
-      const x = (i / 6) * 100;
-      return `<i style="left:${x}%"></i>` + (i < 6 ? `<b style="left:${x + 100 / 12}%">S${i + 1}</b>` : "");
-    }).join("");
     document.querySelectorAll(".tile").forEach((t, i) => {
       const r = t.getBoundingClientRect();
       const d = t.querySelector(".tile__dim");
       if (d) d.textContent = `T${pad(i + 1)} · ${Math.round(r.width)} × ${Math.round(r.height)}`;
     });
   }
-  let readTick = 0;
-  function updateReadout(e) {
-    if (++readTick % 6) return;
-    if (!Sound.on) { specRead.textContent = "silent · click to sound"; return; }
-    const st = Sound.state;
-    specRead.textContent =
-      `f ${st.f ? st.f.toFixed(1) : "—"} Hz   drive ${st.drive.toFixed(1)}   lp ${Math.round(st.lp)} Hz   rms ${e.toFixed(2)}` +
-      (Sound.drone ? "   drone" : "");
-  }
-
-  pano.addEventListener("pointermove", (e) => {
-    const r = pano.getBoundingClientRect();
-    pm.tx = e.clientX - r.left;
-    if (pm.x < 0) pm.x = pm.tx;
-    pm.energy = Math.min(1, pm.energy + Math.abs(e.movementX || 0) * 0.01);
-    Sound.shape(pm.tx / r.width, pm.energy);
-  });
-  pano.addEventListener("pointerleave", () => { pm.tx = -1; });
-  pano.addEventListener("pointerdown", (e) => {
-    const r = pano.getBoundingClientRect();
-    const idx = Math.floor(((e.clientX - r.left) / r.width) * 8) + 3;
-    Sound.start();
-    Sound.hit(Sound.note(idx));
-    pm.energy = 1;
-    Sound.shape((e.clientX - r.left) / r.width, 1);
-  });
-
-  function frame(time) {
-    const t = time / 1000;
-    if (pm.tx < 0) pm.x = -1; else pm.x += (pm.tx - pm.x) * 0.1;
-    pm.energy *= 0.95;
-    const e = Math.min(1, pm.energy + Sound.level());
-    Art.drawRidges(pctx, PW, PH, t, e, pm.x, 6, 20260);
-    updateReadout(e);
-    if (!reduceMotion) requestAnimationFrame(frame);
-  }
-
-  $("#panoTitle").textContent = `${SITE.hero.title}, ${SITE.hero.year}`;
-  $("#panoMeta").textContent = SITE.hero.meta;
 
   /* =======================================================
      6. Navigation
@@ -446,7 +258,7 @@
     try { sessionStorage.setItem("cv-hi", "1"); } catch (_) {}
   }
   $("#hiClose").addEventListener("click", closeHi);
-  $("#hiSound").addEventListener("click", () => { setListening(true); closeHi(); });
+  $("#hiArchive").addEventListener("click", closeHi);
   let seen = false;
   try { seen = sessionStorage.getItem("cv-hi") === "1"; } catch (_) {}
   if (SITE.greeting && !seen) {
@@ -488,17 +300,13 @@
 
   let lastNarrow = innerWidth < 900;
   addEventListener("resize", () => {
-    sizePano();
     const narrow = innerWidth < 900;
     if (narrow !== lastNarrow) { lastNarrow = narrow; buildCollage(); }
     updateSpecs();
-    if (reduceMotion) frame(0);
   });
 
   buildCollage();
   buildStrip();
-  sizePano();
   setTimeout(updateSpecs, 1600); // after the tiles have faded in
-  requestAnimationFrame(frame);
   route();
 })();
