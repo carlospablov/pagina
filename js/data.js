@@ -185,6 +185,7 @@ window.SITE = {
           // Images are linked from the Research and Waves website for now.
           // To host them here, put the files in media/collaborations/transparencies/ and change the paths.
           image: "https://admin.rawxyz.uber.space/uploads/large_research_and_waves_transparencies_01_44d45366ee.jpg",
+          imageCaption: "Record cover by Galina Kruzhilina",
           homeTitle: "Transparencies by Research and Waves",
           homeMeta: "Curator",
           roles: [
