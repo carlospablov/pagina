@@ -146,15 +146,18 @@
     const items = sec ? sec.items.map((it, i) => ({ ...it, section: sec.id, index: i })) : allItems;
     const title = sec ? sec.title : "Archive";
 
+    const isText = !!(sec && sec.text);
     $("#archiveTitle").textContent = title;
-    $("#archiveCount").textContent = items.length ? `(${items.length})` : "(0)";
+    $("#archiveCount").textContent = isText ? "" : items.length ? `(${items.length})` : "(0)";
     $("#archiveTabs").innerHTML =
       `<a href="#archive" class="${!sec ? "is-active" : ""}">All</a>` +
       SITE.sections.map((s) => `<a href="#${s.id}" class="${sec && s.id === sec.id ? "is-active" : ""}">${esc(s.title)}</a>`).join("");
-    $("#archiveFilters").innerHTML = SITE.filters.map((f) => `<span class="link">+ ${esc(f)}</span>`).join("");
+    $("#archiveFilters").innerHTML = isText ? "" : SITE.filters.map((f) => `<span class="link">+ ${esc(f)}</span>`).join("");
 
     let html;
-    if (items.length) {
+    if (isText) {
+      html = `<div class="textpage">${sec.text.map((line) => `<p${/\s/.test(line) ? "" : ' class="is-run"'}>${esc(line)}</p>`).join("")}</div>`;
+    } else if (items.length) {
       html = items.map(cardHTML).join("");
     } else {
       const ghosts = Array.from({ length: 8 }, (_, n) => {
@@ -165,6 +168,7 @@
         ghosts.map((g, n) => cardHTML(g, n)).join("");
     }
     const grid = $("#archiveGrid");
+    grid.classList.toggle("is-text", isText);
     grid.innerHTML = html;
 
     archive.classList.add("is-visible");

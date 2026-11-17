@@ -291,6 +291,19 @@ body.is-open .bottom { background: rgba(255,255,255,.92); padding: 6px 10px; mar
 }
 .archive__empty em { color: var(--ultramarine); }
 
+/* ---------- Text pages (About) ---------- */
+.archive__filters:empty { display: none; }
+.archive__grid.is-text { columns: auto; padding-top: calc(var(--pad) * 2.4); }
+.textpage {
+  max-width: 62rem;
+  font-size: clamp(17px, 1.6vw, 24px);
+  line-height: 1.45;
+  letter-spacing: .005em;
+}
+.textpage p { margin: 0; overflow-wrap: anywhere; }
+.textpage p.is-run { word-break: break-all; } /* a line without spaces wraps as one piece */
+.textpage p:first-child { letter-spacing: .04em; margin-bottom: .2em; }
+
 /* ---------- Detail ---------- */
 .detail {
   position: fixed; inset: 0; right: var(--strip); z-index: 45; background: #fff;

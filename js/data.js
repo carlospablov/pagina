@@ -7,6 +7,9 @@
    As soon as you add items with an `image`, your real images
    replace those placeholders in the collage and the strip.
 
+   Text sections (like About) use `text: [ "line", "line", … ]`
+   instead of items: every entry is shown as its own line.
+
    Item format:
    {
      title: "Resonant Rooms",
@@ -38,7 +41,19 @@ window.SITE = {
   sections: [
     { id: "works",    title: "Works",    items: [] },
     { id: "releases", title: "Releases", items: [] },
-    { id: "about",    title: "About",    items: [] },
+    {
+      id: "about", title: "About", items: [],
+      // Shown exactly as written: one entry per line.
+      text: [
+        "CARLOS VILLAMIZAR",
+        "Geboren / Born in Bogotá-Colombia",
+        "Lebt seit / lives since 1989",
+        "Musiker, Audioproduzent und Klangkünstler / Musician, Sound Producer and Sound Artist",
+        "in Deutschland-Berlin / in Germany-Berlin",
+        "seit / since 2014",
+        "-Worksbasedontemporalandspatialmannersrelatedtosound."
+      ]
+    },
     { id: "contact",  title: "Contact",  items: [] }
   ],
 
