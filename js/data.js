@@ -66,6 +66,7 @@ window.SITE = {
           gallery: [
             { src: "media/works/naked-singularity/satellite-dish.jpg", caption: "Satellite dish and receiver · Młode Wilki Festival, Szczecin" },
             { src: "media/works/naked-singularity/opening.jpg", caption: "Opening · Młode Wilki Festival, Szczecin" },
+            { src: "media/works/naked-singularity/visitors.jpg", caption: "Visitors and dish · Młode Wilki Festival, Szczecin" },
             { src: "media/works/naked-singularity/floor-plan.jpg", caption: "Floor plan" },
             { src: "media/works/naked-singularity/red-blue-light.jpg", caption: "Red and blue light · 48 Stunden Neukölln, Berlin" }
           ],
