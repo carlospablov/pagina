@@ -21,11 +21,10 @@
   const withImages = allItems.filter((it) => it.image);
 
   // Every real picture (cover first, then gallery photos) for the home collage + strip
-  const pool = [];
-  withImages.forEach((it) => {
-    pool.push({ ...it, src: it.image });
-    (it.gallery || []).forEach((g) => pool.push({ ...it, src: g.src, caption: g.caption }));
-  });
+  // Interleaved: all covers first, then gallery photos taken in turns from each item
+  const pool = withImages.map((it) => ({ ...it, src: it.image }));
+  const galleries = withImages.map((it) => (it.gallery || []).map((g) => ({ ...it, src: g.src, caption: g.caption })));
+  for (let k = 0; galleries.some((g) => g[k]); k++) galleries.forEach((g) => g[k] && pool.push(g[k]));
 
   const PLACEHOLDER_NAMES = {
     spectrogram: "Spectrogram study", haze: "Room tone", chladni: "Chladni figure",
@@ -307,8 +306,11 @@
   function openRelease(it) {
     const tracks = (it.sides || []).flatMap((sd) => sd.tracks);
     const total = fmtTime(tracks.reduce((a, [, d]) => a + toSec(d), 0));
-    const relIndex = (SITE.sections.find((x) => x.id === "releases")?.items.indexOf(
-      SITE.sections.find((x) => x.id === "releases").items.find((x) => x.title === it.title)) ?? 0) + 1;
+    // Releases are numbered in chronological order (oldest = 01)
+    const rels = (SITE.sections.find((x) => x.id === "releases")?.items || [])
+      .filter((x) => x.type === "release")
+      .sort((a, b) => String(a.released || a.year).localeCompare(String(b.released || b.year)));
+    const relIndex = rels.findIndex((x) => x.title === it.title) + 1 || 1;
     const accent = it.accent || "var(--ultramarine)";
     const bc = it.bandcamp && it.bandcamp.album
       ? `<iframe class="release__player" title="${esc(it.title)} on Bandcamp" loading="lazy"
@@ -316,11 +318,11 @@
            seamless></iframe>` : "";
 
     $("#detailBody").innerHTML = `
-      <article class="release" style="--accent:${esc(accent)}">
+      <article class="release${it.lowercase ? " release--lower" : ""}" style="--accent:${esc(accent)}">
        <div class="release__top">
         <div class="release__cover">
           <img src="${esc(it.image)}" alt="${esc(it.title)}, cover artwork">
-          <span class="release__fig">FIG. 00 — COVER${it.credits && it.credits[0] ? " · " + esc(it.credits[0].replace("_", ":")) : ""}</span>
+          <span class="release__fig">FIG. 00 — COVER${it.artwork ? " · ARTWORK: " + esc(it.artwork.toUpperCase()) : ""}</span>
         </div>
         <div class="release__info">
           <p class="release__kicker">RELEASE ${pad(relIndex)} · ${esc((it.label || "").toUpperCase())} · ${esc((it.format || "").toUpperCase())}</p>
@@ -343,7 +345,7 @@
         </div>
        </div>
         ${(it.gallery || []).length ? `
-          <div class="release__gallery">
+          <div class="release__gallery" data-count="${it.gallery.length}">
             ${it.gallery.map((g, i) => `
               <figure>
                 <button class="release__shot" data-src="${esc(g.src)}" aria-label="Enlarge: ${esc(g.caption || "")}"><img src="${esc(g.src)}" alt="${esc(g.caption || it.title)}" loading="lazy"></button>
