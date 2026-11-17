@@ -50,17 +50,22 @@
   /* =======================================================
      3. Collage: an edge-to-edge composition of tiles
      ======================================================= */
+  // One tile per work / release. The bottom-left corner stays free for the CV mark.
   const LAYOUT_WIDE = [
-    { x: 0,  y: 0,  w: 35, h: 62, veil: 0 },
-    { x: 35, y: 0,  w: 31, h: 57, veil: 0.62 },
-    { x: 66, y: 0,  w: 34, h: 60, veil: 0.72 },
-    { x: 0,  y: 62, w: 29, h: 38, veil: 0.08 },
-    { x: 54, y: 66, w: 21, h: 34, veil: 0.8 }
+    { x: 0,  y: 0,  w: 34, h: 54, veil: 0 },
+    { x: 34, y: 0,  w: 30, h: 46, veil: 0.12 },
+    { x: 64, y: 0,  w: 36, h: 60, veil: 0 },
+    { x: 40, y: 54, w: 25, h: 46, veil: 0.08 },
+    { x: 66, y: 64, w: 18, h: 36, veil: 0.1 },
+    { x: 84, y: 64, w: 16, h: 30, veil: 0.1 }
   ];
   const LAYOUT_NARROW = [
-    { x: 0,  y: 0,  w: 62, h: 38, veil: 0 },
-    { x: 62, y: 0,  w: 38, h: 26, veil: 0.6 },
-    { x: 0,  y: 68, w: 54, h: 32, veil: 0.1 }
+    { x: 0,  y: 0,  w: 52, h: 30, veil: 0 },
+    { x: 52, y: 0,  w: 48, h: 24, veil: 0.1 },
+    { x: 0,  y: 32, w: 46, h: 26, veil: 0 },
+    { x: 48, y: 27, w: 52, h: 31, veil: 0.1 },
+    { x: 56, y: 60, w: 44, h: 22, veil: 0.1 },
+    { x: 0,  y: 60, w: 0,  h: 0,  veil: 0 }
   ];
 
   const collage = $("#collage");
@@ -68,10 +73,13 @@
     const narrow = innerWidth < 900;
     const layout = narrow ? LAYOUT_NARROW : LAYOUT_WIDE;
     collage.innerHTML = "";
-    layout.forEach((L, i) => {
-      const real = pool[i];
-      const item = real || placeholder(i, 640, Math.round(640 * (L.h / L.w) * (innerHeight / innerWidth) * 1.1) || 640);
-      const src = real ? real.src : item.image;
+    // one picture per work / release, chronological (works, then releases)
+    const main = withImages.map((it) => ({ ...it, src: it.image }));
+    layout.slice(0, main.length).forEach((L, i) => {
+      if (!L.w) return;
+      const real = main[i];
+      const item = real;
+      const src = real.src;
       const tile = document.createElement("figure");
       tile.className = "tile";
       tile.style.cssText = `left:${L.x}%;top:${L.y}%;width:${L.w}%;height:${L.h}%;--veil:${L.veil};--i:${i}`;
@@ -80,7 +88,7 @@
         <span class="tile__dim"></span>
         <figcaption class="tile__cap">
           <span>${esc(item.title)}, ${esc(item.year ?? "")}</span>
-          <span class="muted">${esc(item.location ?? "")}</span>
+          <span class="muted">${esc(item.type === "release" ? item.location : item.medium || item.location || "")}</span>
           <span class="plus"><span class="link">+ More</span></span>
         </figcaption>`;
       tile.addEventListener("click", () => {

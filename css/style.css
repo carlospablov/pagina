@@ -111,7 +111,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .tile__cap .muted { color: #6f6f6f; }
 .tile__cap .plus { margin-top: .5em; display: flex; gap: 1.2em; }
 .tile, .strip img { cursor: pointer; }
-.tile:hover .tile__cap { opacity: 1; transform: none; }
+.tile__cap { opacity: 1; transform: none; }   /* always visible: every tile is a link */
+.tile:hover .tile__cap { background: #fff; }
 .tile__cap { background: rgba(255,255,255,.86); padding: 8px 10px; width: max-content; max-width: calc(100% - 24px); }
 
 /* ---------- Right strip ---------- */
