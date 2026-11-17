@@ -102,9 +102,9 @@ body.no-intro .tile { animation: none; opacity: 1; }
   transition: transform 2.4s var(--ease);
 }
 .tile--logos { background: #000; }
-.tile--logos img { position: absolute; inset: 0; object-fit: contain; padding: 10% 10% 30%; transform: none; opacity: 0; }
+.tile--logos img { position: absolute; inset: 0; object-fit: contain; object-position: 50% 32%; padding: 0; transform: scale(1.18); opacity: 0; }
 .tile--logos img.is-on { opacity: 1; }
-.tile--logos:hover img { transform: none; }
+.tile--logos:hover img { transform: scale(1.18); }
 .tile--logos.is-glitch img.is-on { animation: logoGlitch .26s steps(4) 1; }
 .tile::after {           /* the "washed out" veil */
   content: ""; position: absolute; inset: 0;
