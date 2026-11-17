@@ -179,34 +179,31 @@ window.SITE = {
           title: "Spectral Lures",
           category: "Audiovisual live performance",
           medium: "Audiovisual live performance · sound design",
-          subtitle: "An audiovisual live performance by Carlos.exe (Carlos Serrano), with sound design by Carlos Villamizar.",
+          subtitle: "An audiovisual live act by Carlos.exe, the collective of Carlos Serrano and Carlos Villamizar.",
           year: 2025,
           location: "Berlin",
+          image: "media/collaborations/spectral-lures/dome-audience.jpg",
+          thumb: "media/collaborations/spectral-lures/dome-audience-720.jpg",
+          youtube: "_F1qOQATaVA",
+          roles: [
+            { role: "Concept & visuals", name: "Carlos Serrano", link: "https://cayequitas.com/#p-spectral-lures" },
+            { role: "Sound design", name: "Carlos Villamizar" }
+          ],
+          text: "Spectral Lures is an experimental audiovisual live act exploring the space between illusion, memory and simulation. The act invites audiences to lose orientation and immerse themselves in a world where perception is constantly rewritten, a journey through the shimmering interplay of sound, vision and synthetic imagination. The performance combines electronic sound with visuals generated in real time using advanced 3D software.",
+          textNote: "Carlos.exe is an audiovisual collective formed by Carlos Serrano and Carlos Villamizar.",
+          tools: "TouchDesigner · Unreal Engine · Ableton Live · Elektron",
           exhibitions: [
             { title: "B-Dome", place: "RAW-Gelände, Berlin", date: "2025" },
             { title: "Alte Münze", place: "Berlin", date: "2025" }
           ],
-          // Images are linked from Carlos Serrano's site (cayequitas.com).
-          // To host them here instead, put the files in media/collaborations/spectral-lures/ and change the paths.
-          image: "https://cayequitas.com/assets/media/spectral-lures/07.webp",
-          youtube: "_F1qOQATaVA",
-          roles: [
-            { role: "Concept & visuals", name: "Carlos Serrano (Carlos.exe)", link: "https://cayequitas.com/#p-spectral-lures" },
-            { role: "Sound design", name: "Carlos Villamizar" }
-          ],
-          text: "An experimental audiovisual performance that drifts across the borders of illusion and perception. Sound and image are conjured together live, shimmering like mirages that seduce the senses before dissolving into instability. Spectral tones, fractured pulses and synthetic textures hover between resonance and rupture, while visuals generated in real time build transient architectures, spectral terrains and impossible geometries that emerge only to collapse again. Neither concert nor film, Spectral Lures is an immersion: a drift through unstable realities where sound and light entwine into shifting horizons.",
-          textNote: "Text adapted from Carlos Serrano.",
-          tools: "TouchDesigner · Unreal Engine · Ableton Live",
           gallery: [
             { youtube: "HLOeoYEUsDQ", caption: "Performance video" },
-            { src: "https://cayequitas.com/assets/media/spectral-lures/01.webp", caption: "Performance" },
-            { src: "https://cayequitas.com/assets/media/spectral-lures/10.webp", caption: "Performance" },
-            { src: "https://cayequitas.com/assets/media/spectral-lures/13.webp", caption: "Live" },
-            { src: "https://cayequitas.com/assets/media/spectral-lures/15.webp", caption: "Audience" },
-            { src: "https://cayequitas.com/assets/media/spectral-lures/04.webp", caption: "Live setup with Unreal Engine, TouchDesigner and Ableton Live" },
-            { src: "https://cayequitas.com/assets/media/spectral-lures/08.webp", caption: "Previz of the show and screen dimensions" }
-          ],
-          credit: "Images and videos: Carlos Serrano"
+            { src: "media/collaborations/spectral-lures/dome-audience.jpg", caption: "Live in the dome · B-Dome, Berlin" },
+            { src: "media/collaborations/spectral-lures/duo-live.jpg", caption: "Carlos.exe live" },
+            { src: "media/collaborations/spectral-lures/dome-back-view.jpg", caption: "Under the dome · B-Dome, Berlin" },
+            { src: "media/collaborations/spectral-lures/dome-performance.jpg", caption: "Performance · B-Dome, Berlin" },
+            { src: "media/collaborations/spectral-lures/live-portrait.jpg", caption: "Sound, live" }
+          ]
         }
       ]
     },
