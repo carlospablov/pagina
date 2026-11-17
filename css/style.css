@@ -72,6 +72,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- Collage ---------- */
 .collage {
   position: fixed; inset: 0; right: var(--strip);
+  top: clamp(76px, 11vh, 110px);   /* leaves a white band so the name stays readable */
   z-index: 1;
 }
 .tile {
@@ -131,44 +132,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .strip img:hover { filter: none; opacity: 1; }
 @keyframes stripScroll { to { transform: translateY(-50%); } }
 
-/* ---------- Centre: Chladni plate ---------- */
+/* ---------- Centre: the line ---------- */
 .stage {
-  position: fixed; inset: 0; right: var(--strip);
-  display: flex; align-items: center; justify-content: center;
+  position: fixed; left: 0; right: var(--strip); top: 50%;
+  height: 120px; transform: translateY(-50%);
   z-index: 10; pointer-events: none;
 }
-.plate {
-  pointer-events: auto;
-  width: min(44vh, 34vw, 460px);
-  transform: translateY(-1vh);
-  opacity: 0; animation: plateIn 1.6s var(--ease) .4s forwards;
-}
-@keyframes plateIn { from { opacity: 0; transform: translateY(2vh); } to { opacity: 1; transform: translateY(-1vh); } }
-.plate__frame { position: relative; }
-#plate {
-  display: block; width: 100%; aspect-ratio: 1;
-  box-shadow: 0 30px 60px -18px rgba(0, 0, 0, .35), 0 4px 14px rgba(0, 0, 0, .08);
-  cursor: pointer; touch-action: manipulation;
-}
-.plate__cap {
-  display: grid; grid-template-columns: 1fr auto; gap: 2px 1.6rem;
-  margin-top: 14px; font-size: 12px; line-height: 1.3;
-  background: rgba(255, 255, 255, .9); padding: 8px 10px;
-}
-.plate__title { grid-column: 1; }
-.plate__meta { grid-column: 1; color: #6f6f6f; }
-.plate__actions { grid-column: 2; grid-row: 1 / span 2; align-self: end; display: flex; gap: 1.2em; white-space: nowrap; }
-
-/* technical-drawing annotations */
-.spec { position: absolute; inset: 0; pointer-events: none; font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: #7a7a7a; text-transform: uppercase; }
-.spec__w { position: absolute; left: 0; right: 0; top: -26px; height: 9px; border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a; }
-.spec__w::before { content: ""; position: absolute; left: 0; right: 0; top: 4px; height: 1px; background: #9a9a9a; }
-.spec__w span { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); background: #fff; padding: 0 8px; white-space: nowrap; }
-.spec__h { position: absolute; top: 0; bottom: 0; right: -26px; width: 9px; border-top: 1px solid #9a9a9a; border-bottom: 1px solid #9a9a9a; }
-.spec__h::before { content: ""; position: absolute; top: 0; bottom: 0; left: 4px; width: 1px; background: #9a9a9a; }
-.spec__h span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; white-space: nowrap; background: #fff; padding: 6px 0; }
-.spec__read { position: absolute; left: 10px; bottom: 8px; color: #8d8a83; font-size: 9px; }
-.spec__mode { display: block; left: auto; right: 0; top: -26px; bottom: auto; transform: translateY(-100%); padding: 0 0 4px; }
+@keyframes fadeIn { to { opacity: 1; } }
+#line { display: block; width: 100%; height: 100%; opacity: 0; animation: fadeIn 1.6s var(--ease) .6s forwards; }
 
 /* ---------- Measure mode ---------- */
 .tile__dim { display: none; }
@@ -418,10 +389,6 @@ body.is-open .mark, body.is-open .stage { opacity: 0 !important; transition: opa
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
-  .plate { width: min(72vw, 52vh); }
-  .plate__cap { grid-template-columns: 1fr; }
-  .plate__actions { grid-column: 1; grid-row: auto; margin-top: .5em; }
-  .spec__h { display: none; }
   .top__nav { display: none; }
   .top__menu { display: block; }
   .bottom { left: auto; font-size: 12px; gap: 12px; }

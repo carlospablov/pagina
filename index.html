@@ -29,28 +29,10 @@
   <!-- ===== Thumbnail strip on the right edge ===== -->
   <aside class="strip" id="strip" aria-hidden="true"></aside>
 
-  <!-- ===== Centre: Chladni sand plate ===== -->
-  <main class="stage">
-    <figure class="plate">
-      <div class="plate__frame">
-        <canvas id="plate" aria-label="Chladni plate: sand grains settling on the nodal lines of a vibrating plate. Click to change the vibration mode."></canvas>
-        <div class="spec" aria-hidden="true">
-          <div class="spec__w"><span id="plateW">W = — · SQUARE PLATE</span></div>
-          <div class="spec__h"><span>H = W · FIXED</span></div>
-          <div class="spec__mode" id="plateMode">MODE —</div>
-          <div class="spec__read" id="plateRead"></div>
-        </div>
-      </div>
-      <figcaption class="plate__cap">
-        <span class="plate__title">Chladni plate, 2026</span>
-        <span class="plate__meta">Sand on a vibrating plate. Click to change the frequency</span>
-        <span class="plate__actions">
-          <button class="link" id="plateNext">+ Next mode</button>
-          <button class="link" id="plateShake">+ Shake</button>
-        </span>
-      </figcaption>
-    </figure>
-  </main>
+  <!-- ===== Centre: a single line that vibrates when you cross it ===== -->
+  <div class="stage" aria-hidden="true">
+    <canvas id="line"></canvas>
+  </div>
 
   <!-- ===== Giant cropped mark, bottom-left ===== -->
   <a href="#" class="mark" data-home aria-label="Carlos Villamizar, home">CV<sup>®</sup></a>
@@ -70,12 +52,12 @@
   <div class="hi" id="hi" role="dialog" aria-labelledby="hiTitle" hidden>
     <button class="hi__x" id="hiClose" aria-label="Close">X</button>
     <p id="hiTitle">Hi!</p>
-    <p>This archive is still being tuned. Meanwhile, play with the plate: click it to change its frequency and watch the sand find the silent lines.</p>
+    <p>This archive is still being tuned. Meanwhile, the releases are ready to be heard.</p>
     <div class="hi__row">
       <span class="hi__line">Works</span>
       <span class="hi__line">Releases</span>
       <span class="hi__line">About</span>
-      <a class="pill" id="hiArchive" href="#archive">+ Archive</a>
+      <a class="pill" id="hiArchive" href="#releases">+ Releases</a>
     </div>
   </div>
 
@@ -106,6 +88,6 @@
   <script src="js/data.js"></script>
   <script src="js/art.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/plate.js"></script>
+  <script src="js/line.js"></script>
 </body>
 </html>
