@@ -300,9 +300,9 @@ body.is-open .bottom { background: rgba(255,255,255,.92); padding: 6px 10px; mar
   line-height: 1.45;
   letter-spacing: .005em;
 }
-.textpage p { margin: 0; overflow-wrap: anywhere; }
+.textpage p { margin: 0 0 .9em; overflow-wrap: anywhere; }
 .textpage p.is-run { word-break: break-all; } /* a line without spaces wraps as one piece */
-.textpage p:first-child { letter-spacing: .04em; margin-bottom: .2em; }
+.textpage p:first-child { letter-spacing: .04em; }
 
 /* ---------- Detail ---------- */
 .detail {
