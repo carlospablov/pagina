@@ -30,6 +30,8 @@ Edit only `js/data.js`. Each section (Works, Releases, About, Contact) has an em
 }
 ```
 
+Items are sorted chronologically (oldest first) by `released` or `year`, so the order in the file doesn't matter. A work can have `video: { src, poster, caption }` (plays muted on loop, with a sound toggle).
+
 Empty sections show a "Forthcoming" state automatically. Until you add items with an `image`, the home collage and the right strip show generated placeholders (spectrograms, waveforms, Chladni and Lissajous figures). Your real images replace them automatically. Add your email and Instagram in `artist` and they appear in the menu.
 
 To rename, add or remove menu sections, edit the `sections` list. Each `id` becomes the URL (`/#works`).

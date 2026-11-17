@@ -70,6 +70,31 @@ window.SITE = {
             { src: "media/works/naked-singularity/red-blue-light.jpg", caption: "Red and blue light · 48 Stunden Neukölln, Berlin" }
           ],
           text: "An untuned radio frequency reveals the shadows of electromagnetic noise, residues of the cosmic background and of our own electronics. Built on a low-frequency sound system, the installation reproduces the sound of a hacked radio and of radio telescopes, tuned to an unused frequency. Passed through a filter-modulator unit, the signal radiates outward as abstract, processed radio waves."
+        },
+        {
+          type: "work",
+          title: "Vestige",
+          category: "Site-specific installation",
+          medium: "Site-specific sound installation",
+          subtitle: "Site-specific sound installation in an industrial stairwell, where echoes become a way of perceiving space.",
+          year: 2018,
+          location: "Berlin-Alt-Hohenschönhausen",
+          image: "media/works/vestige/stairwell-stills.jpg",
+          thumb: "media/works/vestige/stairwell-stills-720.jpg",
+          video: {
+            src: "media/works/vestige/vestige-collage.mp4",
+            poster: "media/works/vestige/vestige-poster.jpg",
+            caption: "Video collage · stairwell, ID Studios"
+          },
+          text: "Vestige is a site-specific sound installation inside a large industrial building in the former restricted area of Berlin-Alt-Hohenschönhausen, now home to artists' studios. The piece occupies one of the building's four industrial stairwells, closed off for the work and entered from the ground floor. Echoes become a means of perceiving space: the installation explores the psychological and physiological responses they provoke, orienting the experience towards locating oneself through sound reflected from the surfaces.",
+          research: "Sound-oriented practices such as echolocation gather information from the environment through sensory substitution, using echoes to perceive space. Multisensory integration lets the senses interact, shaping our behaviour, perception and understanding of our surroundings. Being aware of the capacities of our attention, and cultivating these practices, leads to a more coherent and heightened comprehension of the environment. The accompanying research considers how mental states arise from sensory input, drawing on Intentionality and Functionalism as foundations for the meaning we attribute to objects and events.",
+          exhibitions: [
+            { title: "Masterausstellung UdK Berlin, ID Studios", place: "Genslerstraße 13–13a, Berlin", date: "2018" }
+          ],
+          gallery: [
+            { src: "media/works/vestige/stair-section.jpg", caption: "Stairwell section, light and sound positions" },
+            { src: "media/works/vestige/stairwell-stills.jpg", caption: "Stairwell stills" }
+          ]
         }
       ]
     },

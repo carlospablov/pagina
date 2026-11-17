@@ -16,6 +16,10 @@
   /* =======================================================
      2. Content: real items first, generated placeholders after
      ======================================================= */
+  // Everything is shown in chronological order (oldest first)
+  const when = (it) => String(it.released || it.year || "9999");
+  SITE.sections.forEach((sec) => sec.items.sort((a, b) => when(a).localeCompare(when(b))));
+
   const allItems = [];
   SITE.sections.forEach((sec) => sec.items.forEach((it, i) => allItems.push({ ...it, section: sec.id, index: i })));
   const withImages = allItems.filter((it) => it.image);
@@ -370,7 +374,12 @@
   function openWork(it, sec) {
     const n = sec.items.indexOf(it) + 1;
     const meta = [it.year, it.location].filter(Boolean).map(esc).join(" · ");
-    const media = it.image
+    const media = it.video
+      ? `<div class="work__video">
+           <video id="workVideo" src="${esc(it.video.src)}" poster="${esc(it.video.poster || "")}" autoplay muted loop playsinline preload="metadata"></video>
+           <button class="link work__sound" id="workSound" aria-pressed="false">+ Sound on</button>
+         </div>`
+      : it.image
       ? `<img src="${esc(it.image)}" alt="${esc(it.title)}">`
       : it.visual === "static"
         ? `<canvas class="work__radio" id="workRadio" aria-label="Live visual: noise of an untuned radio frequency"></canvas>`
@@ -380,7 +389,7 @@
        <div class="release__top">
         <div class="release__cover">
           ${media}
-          <span class="release__fig">FIG. 00 — ${it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
+          <span class="release__fig">FIG. 00 — ${it.video ? esc((it.video.caption || "Video").toUpperCase()) : it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
         </div>
         <div class="release__info">
           <p class="release__kicker">WORK ${pad(n)} · ${esc((it.category || "").toUpperCase())}</p>
@@ -389,6 +398,7 @@
           ${meta ? `<p class="release__meta">${meta}</p>` : ""}
           ${it.audio ? playerHTML(it.audio) : ""}
           <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}</div>
+          ${it.research ? `<div class="release__text work__research"><p class="release__label">Research</p><p>${esc(it.research)}</p></div>` : ""}
           ${it.exhibitions ? `<div class="release__side work__shows">
               <p class="release__label">Presented at</p>
               <ol>${it.exhibitions.map((x) => `<li><span>${esc(x.title)} <em>— ${esc(x.place)}</em></span><i></i><b>${esc(x.date)}</b></li>`).join("")}</ol>
@@ -409,6 +419,15 @@
       b.addEventListener("click", () => openLightbox(b.dataset.src, b.querySelector("img").alt)));
     if (!it.image && it.visual === "static") startRadio($("#workRadio"));
     if (it.audio) wirePlayer(it.audio);
+    if (it.video) {
+      const v = $("#workVideo"), b = $("#workSound");
+      b.addEventListener("click", () => {
+        v.muted = !v.muted;
+        if (!v.muted) v.play();
+        b.textContent = v.muted ? "+ Sound on" : "– Sound off";
+        b.setAttribute("aria-pressed", String(!v.muted));
+      });
+    }
     detail.classList.add("is-visible", "is-release");
     detail.setAttribute("aria-hidden", "false");
     detail.scrollTop = 0;
@@ -473,6 +492,8 @@
   function stopPlayer() {
     const a = document.getElementById("playerAudio");
     if (a) a.pause();
+    const v = document.getElementById("workVideo");
+    if (v) { v.pause(); v.muted = true; }
     if (player) cancelAnimationFrame(player);
     player = null;
   }
