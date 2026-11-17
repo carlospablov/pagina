@@ -55,7 +55,7 @@
       const px = (i / (N - 1)) * W;
       i ? ctx.lineTo(px, mid + y[i]) : ctx.moveTo(px, mid + y[i]);
     }
-    ctx.strokeStyle = "#0b0b0b";
+    ctx.strokeStyle = "#ffffff";   // shown through mix-blend-mode: difference → black on white, white on dark
     ctx.lineWidth = 1;
     ctx.stroke();
   }

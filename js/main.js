@@ -380,13 +380,14 @@
        <div class="release__top">
         <div class="release__cover">
           ${media}
-          <span class="release__fig">FIG. 00 — ${it.image ? "INSTALLATION VIEW" : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
+          <span class="release__fig">FIG. 00 — ${it.image ? esc((it.imageCaption || "Installation view").toUpperCase()) : "UNTUNED FREQUENCY · LIVE NOISE"}</span>
         </div>
         <div class="release__info">
           <p class="release__kicker">WORK ${pad(n)} · ${esc((it.category || "").toUpperCase())}</p>
           <h3 class="release__title">${esc(it.title)}</h3>
           ${it.subtitle ? `<p class="work__subtitle">${esc(it.subtitle)}</p>` : ""}
           ${meta ? `<p class="release__meta">${meta}</p>` : ""}
+          ${it.audio ? playerHTML(it.audio) : ""}
           <div class="release__text">${it.text ? `<p>${esc(it.text)}</p>` : ""}</div>
           ${it.components ? `<div class="release__side work__parts">
               <p class="release__label">Elements</p>
@@ -407,11 +408,73 @@
     $("#detailBody").querySelectorAll(".release__shot").forEach((b) =>
       b.addEventListener("click", () => openLightbox(b.dataset.src, b.querySelector("img").alt)));
     if (!it.image && it.visual === "static") startRadio($("#workRadio"));
+    if (it.audio) wirePlayer(it.audio);
     detail.classList.add("is-visible", "is-release");
     detail.setAttribute("aria-hidden", "false");
     detail.scrollTop = 0;
     document.title = `${it.title} — Carlos Villamizar`;
     return true;
+  }
+
+  /* ---------- Audio player with waveform ---------- */
+  let player = null;
+  function playerHTML(a) {
+    return `
+      <div class="player" id="player">
+        <button class="player__btn" id="playerBtn" aria-label="Play">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
+        </button>
+        <div class="player__wave" id="playerWave" role="slider" aria-label="Seek" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <canvas id="playerCanvas"></canvas>
+        </div>
+        <span class="player__time" id="playerTime">0:00</span>
+        <span class="player__label">AUDIO · ${esc((a.label || "").toUpperCase())}</span>
+        <audio id="playerAudio" preload="metadata" src="${esc(a.src)}"></audio>
+      </div>`;
+  }
+  function wirePlayer(a) {
+    const audio = $("#playerAudio"), btn = $("#playerBtn"), wave = $("#playerWave"), cv = $("#playerCanvas"), time = $("#playerTime");
+    const ctx = cv.getContext("2d");
+    const peaks = a.peaks || [];
+    const fmt = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+    function draw() {
+      const r = wave.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+      if (cv.width !== Math.round(r.width * dpr)) { cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr); }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, r.width, r.height);
+      const p = audio.duration ? audio.currentTime / audio.duration : 0;
+      const n = peaks.length, bw = r.width / n, mid = r.height / 2;
+      for (let i = 0; i < n; i++) {
+        const h = Math.max(1, peaks[i] * (r.height - 4));
+        ctx.fillStyle = i / n < p ? "#0b0b0b" : "#c9c9c4";
+        ctx.fillRect(i * bw, mid - h / 2, Math.max(1, bw - 1.5), h);
+      }
+      time.textContent = `${fmt(audio.currentTime || 0)} / ${audio.duration ? fmt(audio.duration) : "–:––"}`;
+      wave.setAttribute("aria-valuenow", Math.round(p * 100));
+    }
+    const loop = () => { draw(); if (!audio.paused) player = requestAnimationFrame(loop); };
+    btn.addEventListener("click", () => { audio.paused ? audio.play() : audio.pause(); });
+    audio.addEventListener("play", () => { btn.classList.add("is-playing"); btn.setAttribute("aria-label", "Pause"); loop(); });
+    audio.addEventListener("pause", () => { btn.classList.remove("is-playing"); btn.setAttribute("aria-label", "Play"); draw(); });
+    audio.addEventListener("loadedmetadata", draw);
+    audio.addEventListener("ended", () => { audio.currentTime = 0; draw(); });
+    const seek = (x) => { const r = wave.getBoundingClientRect(); if (audio.duration) { audio.currentTime = Math.max(0, Math.min(1, (x - r.left) / r.width)) * audio.duration; draw(); } };
+    wave.addEventListener("click", (e) => seek(e.clientX));
+    wave.addEventListener("keydown", (e) => {
+      if (!audio.duration) return;
+      if (e.key === "ArrowRight") audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+      if (e.key === "ArrowLeft") audio.currentTime = Math.max(0, audio.currentTime - 5);
+      if (e.key === " ") { e.preventDefault(); btn.click(); }
+      draw();
+    });
+    addEventListener("resize", draw);
+    draw();
+  }
+  function stopPlayer() {
+    const a = document.getElementById("playerAudio");
+    if (a) a.pause();
+    if (player) cancelAnimationFrame(player);
+    player = null;
   }
 
   // A slowly scrolling 'waterfall' of radio noise: grain + faint drifting carriers
@@ -471,7 +534,7 @@
   function closeLightbox() { lightbox.classList.remove("is-visible"); }
   lightbox.addEventListener("click", closeLightbox);
 
-  function closeDetail() { stopRadio(); closeLightbox(); detail.classList.remove("is-visible", "is-release"); detail.setAttribute("aria-hidden", "true"); }
+  function closeDetail() { stopPlayer(); stopRadio(); closeLightbox(); detail.classList.remove("is-visible", "is-release"); detail.setAttribute("aria-hidden", "true"); }
   $("#detailBack").addEventListener("click", () => history.back());
   $("#detailClose").addEventListener("click", () => goHome());
 
