@@ -36,13 +36,10 @@ window.SITE = {
   greeting: true,
 
   sections: [
-    { id: "works",       title: "Works",       items: [] },
-    { id: "sound",       title: "Sound",       items: [] },
-    { id: "exhibitions", title: "Exhibitions", items: [] },
-    { id: "events",      title: "Events",      items: [] },
-    { id: "texts",       title: "Texts",       items: [] },
-    { id: "about",       title: "About",       items: [] },
-    { id: "contact",     title: "Contact",     items: [] }
+    { id: "works",    title: "Works",    items: [] },
+    { id: "releases", title: "Releases", items: [] },
+    { id: "about",    title: "About",    items: [] },
+    { id: "contact",  title: "Contact",  items: [] }
   ],
 
   filters: ["Year", "Medium", "Location", "Categories", "Latest"]

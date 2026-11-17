@@ -16,7 +16,7 @@ media/          put your images / audio here (create when needed)
 
 ## Adding content
 
-Edit only `js/data.js`. Each section (Works, Sound, Exhibitions, Events, Texts, About, Contact) has an empty `items: []` array. Add objects like this:
+Edit only `js/data.js`. Each section (Works, Releases, About, Contact) has an empty `items: []` array. Add objects like this:
 
 ```js
 {
