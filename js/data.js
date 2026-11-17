@@ -176,6 +176,37 @@ window.SITE = {
       items: [
         {
           type: "work",
+          title: "RIDE OR DIE",
+          category: "Video installation",
+          medium: "Video installation · sound & music",
+          subtitle: "A video installation by Nina E. Schönefeld, with sound design and music supervision by Carlos Villamizar.",
+          year: 2024,
+          location: "Berlin",
+          // Temporary picture: the YouTube preview frame. Replace with the KINDL photos when they arrive.
+          image: "https://i.ytimg.com/vi/yLcbI-uLZ7o/maxresdefault.jpg",
+          youtube: "yLcbI-uLZ7o",
+          homeTitle: "RIDE OR DIE by Nina E. Schönefeld",
+          homeMeta: "Sound design & music supervision",
+          roles: [
+            { role: "Written, edited & directed", name: "Nina E. Schönefeld", link: "https://www.ninaeschoenefeld.com/" },
+            { role: "Director of photography", name: "Valentin Giebel" },
+            { role: "Sound design & music supervision", name: "Carlos Villamizar" }
+          ],
+          text: "Nina E. Schönefeld's video installation RIDE OR DIE (2024), shown for the first time at KINDL, focuses on the moment of decision when relentless, radical resistance begins: against populist autocrats and the threat to the separation of powers and freedom of the press.",
+          tools: "HD video · 30:13 · black and white & colour · sound",
+          exhibitions: [
+            { title: "KINDL – Zentrum für zeitgenössische Kunst, M1 VideoSpace", place: "Berlin", date: "Sep/2024 – Feb/2025" }
+          ],
+          credits: [
+            "Written, Edited & Directed by Nina E. Schönefeld",
+            "Director of Photography: Valentin Giebel",
+            "Sound & Music: Carlos Pablo Villamizar",
+            "Starring: Maria Ivanova / Robert Gründler / Caroline Shepard / Benjamin Haim Shepard / Lea Carrera / Lilian Schulz / Jessica Daxenberger / Manfred Peckl / Violet Green / Sophia Salebia / Emilio Rapanà / Max Holle / Dorothy Shepard / Änni Lee Jones / Barrett Shepard",
+            "Curator: Kathrin Becker"
+          ]
+        },
+        {
+          type: "work",
           title: "Spectral Lures",
           category: "Audiovisual live performance",
           medium: "Audiovisual live performance · sound design",

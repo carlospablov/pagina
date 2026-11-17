@@ -65,7 +65,7 @@
     { x: 0,  y: 32, w: 46, h: 26, veil: 0 },
     { x: 48, y: 27, w: 52, h: 31, veil: 0.1 },
     { x: 56, y: 60, w: 44, h: 22, veil: 0.1 },
-    { x: 0,  y: 60, w: 0,  h: 0,  veil: 0 }
+    { x: 56, y: 84, w: 44, h: 16, veil: 0 }
   ];
 
   const collage = $("#collage");
