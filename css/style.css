@@ -421,6 +421,28 @@ body.no-intro .tile { animation: none; opacity: 1; }
 .work__prog-what em { font-style: normal; }
 .work__prog-what i { font-style: normal; color: #6f6f6f; font-size: 13px; }
 
+/* ---------- Carousel ---------- */
+.carousel { margin: 0 0 calc(var(--pad) * 4); border-top: 1px solid var(--ink); padding-top: .9rem; }
+.carousel__head { display: flex; align-items: baseline; gap: 1.4rem; margin-bottom: 1rem; }
+.carousel__head .release__label { margin: 0; }
+.carousel__count { margin-left: auto; font-family: var(--mono); font-size: 11px; color: #6f6f6f; }
+.carousel__btn { font-size: 13px; }
+.carousel__track {
+  display: flex; gap: var(--pad); overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; outline: none; padding-bottom: 2px;
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__slide { flex: 0 0 min(72%, 980px); scroll-snap-align: start; margin: 0; }
+.carousel__slide img, .carousel__slide video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #000; }
+.carousel__slide img { cursor: zoom-in; }
+.carousel__slide figcaption { margin-top: .5rem; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: #8a8a8a; }
+@media (max-width: 900px) {
+  .carousel__slide { flex-basis: 88%; }
+  .carousel__head { flex-wrap: wrap; gap: .4rem 1rem; }
+  .carousel__head .release__label { flex-basis: 100%; }
+  .carousel__count { margin-left: 0; margin-right: auto; }
+}
+
 /* ---------- Audio player ---------- */
 .player {
   display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .4rem 1rem;

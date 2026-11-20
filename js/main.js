@@ -452,6 +452,7 @@
           ${it.credits ? `<div class="release__credits"><p class="release__label">${esc(it.creditsLabel || "Credits")}</p>${it.credits.map((c) => `<p>${esc(c)}</p>`).join("")}</div>` : ""}
         </div>
        </div>
+        ${it.carousel ? carouselHTML(it.carousel) : ""}
         ${(it.gallery || []).length ? `
           <div class="release__gallery${it.galleryLayout ? " g-" + esc(it.galleryLayout) : ""}" data-count="${it.gallery.length}">
             ${it.gallery.map((g, i) => `
@@ -469,6 +470,7 @@
     if (!it.image && it.visual === "static") startRadio($("#workRadio"));
     if (it.audio) wirePlayer(it.audio);
     if (it.logos) startLogos();
+    if (it.carousel) wireCarousel();
     if (it.video) {
       const v = $("#workVideo"), b = $("#workSound");
       b.addEventListener("click", () => {
@@ -544,8 +546,65 @@
     if (a) a.pause();
     const v = document.getElementById("workVideo");
     if (v) { v.pause(); v.muted = true; }
+    document.querySelectorAll(".carousel video").forEach((x) => x.pause());
     if (player) cancelAnimationFrame(player);
     player = null;
+  }
+
+  /* ---------- Carousel (photos + video) ---------- */
+  function carouselHTML(c) {
+    const n = c.slides.length;
+    return `
+      <section class="carousel" id="carousel" aria-roledescription="carousel" aria-label="${esc(c.label || "")}">
+        <div class="carousel__head">
+          <p class="release__label">${esc(c.label || "")}</p>
+          <span class="carousel__count" id="carCount">01 / ${pad(n)}</span>
+          <button class="link carousel__btn" id="carPrev" aria-label="Previous">&lt; Prev</button>
+          <button class="link carousel__btn" id="carNext" aria-label="Next">Next &gt;</button>
+        </div>
+        <div class="carousel__track" id="carTrack" tabindex="0">
+          ${c.slides.map((sl, i) => `
+            <figure class="carousel__slide">
+              ${sl.video
+                ? `<video src="${esc(sl.video)}" poster="${esc(sl.poster || "")}" controls playsinline preload="none"></video>`
+                : `<img src="${esc(sl.src)}" alt="${esc(sl.caption || "")}" loading="lazy">`}
+              <figcaption>FIG. ${pad(i + 1)} — ${esc((sl.caption || "").toUpperCase())}</figcaption>
+            </figure>`).join("")}
+        </div>
+      </section>`;
+  }
+  function wireCarousel() {
+    const track = $("#carTrack"), count = $("#carCount");
+    if (!track) return;
+    const slides = [...track.children], n = slides.length;
+    const current = () => {
+      const x = track.scrollLeft + 1;
+      let k = 0;
+      slides.forEach((sl, i) => { if (sl.offsetLeft - track.offsetLeft <= x) k = i; });
+      return k;
+    };
+    const go = (k) => {
+      k = Math.max(0, Math.min(n - 1, k));
+      track.scrollTo({ left: slides[k].offsetLeft - track.offsetLeft, behavior: "smooth" });
+    };
+    $("#carPrev").addEventListener("click", () => go(current() - 1));
+    $("#carNext").addEventListener("click", () => go(current() + 1));
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); go(current() + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); go(current() - 1); }
+    });
+    let t = null;
+    track.addEventListener("scroll", () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const k = current();
+        count.textContent = `${pad(k + 1)} / ${pad(n)}`;
+        track.querySelectorAll("video").forEach((v) => { if (!v.closest(".carousel__slide") || slides.indexOf(v.closest(".carousel__slide")) !== k) v.pause(); });
+      }, 80);
+    }, { passive: true });
+    slides.forEach((sl, i) => sl.querySelector("img")?.addEventListener("click", () => {
+      if (i !== current()) go(i); else openLightbox(sl.querySelector("img").src, sl.querySelector("img").alt);
+    }));
   }
 
   // Logo variations: switch like a flickering signal, every few seconds or on click
