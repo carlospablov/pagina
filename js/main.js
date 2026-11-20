@@ -547,7 +547,7 @@
     if (a) a.pause();
     const v = document.getElementById("workVideo");
     if (v) { v.pause(); v.muted = true; }
-    document.querySelectorAll(".carousel video").forEach((x) => x.pause());
+    document.querySelectorAll(".carousel video, .festfilm video").forEach((x) => x.pause());
     if (player) cancelAnimationFrame(player);
     player = null;
   }
@@ -555,10 +555,18 @@
   /* ---------- Carousel (photos + video) ---------- */
   function carouselHTML(c) {
     const n = c.slides.length;
-    return `
-      <section class="carousel" id="carousel" aria-roledescription="carousel" aria-label="${esc(c.label || "")}">
+    const film = c.film ? `
+      <section class="festfilm">
+        <p class="release__label">${esc(c.label || "")}</p>
+        <figure class="festfilm__fig">
+          <video src="${esc(c.film.src)}" poster="${esc(c.film.poster || "")}" controls playsinline preload="none"></video>
+          <figcaption>${esc((c.film.caption || "").toUpperCase())}</figcaption>
+        </figure>
+      </section>` : "";
+    return film + `
+      <section class="carousel" id="carousel" aria-roledescription="carousel" aria-label="Photos">
         <div class="carousel__head">
-          <p class="release__label">${esc(c.label || "")}</p>
+          <p class="release__label">${c.film ? "Photos" : esc(c.label || "")}</p>
           <span class="carousel__count" id="carCount">01 / ${pad(n)}</span>
           <button class="link carousel__btn" id="carPrev" aria-label="Previous">&lt; Prev</button>
           <button class="link carousel__btn" id="carNext" aria-label="Next">Next &gt;</button>

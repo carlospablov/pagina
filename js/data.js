@@ -347,8 +347,8 @@ window.SITE = {
           text: "Sonic Inclusion is a Berlin-based gallery and laboratory where art, science and society intersect and are reimagined through sound. Rooted in an antidisciplinary approach, the space invites creators from diverse fields (artists, technologists, scientists, designers, choreographers, writers and more) to collaborate beyond the boundaries of traditional disciplines. Exhibitions function as working labs: live prototypes, visible signal flows, sound pressure logs, captioned audio, spectrograms, tactile interfaces and facilitated feedback. Each show evolves during its run, and every project publishes open methods so others can reuse and build upon the work.",
           carousel: {
             label: "Signal Cultures · first edition, 2026",
+            film: { src: "media/initiatives/sonic-inclusion/signal-cultures-2026.mp4", poster: "media/initiatives/sonic-inclusion/signal-cultures-poster.jpg", caption: "Festival film · Volumes I–III" },
             slides: [
-              { video: "media/initiatives/sonic-inclusion/signal-cultures-2026.mp4", poster: "media/initiatives/sonic-inclusion/signal-cultures-poster.jpg", caption: "Festival film · Volumes I–III" },
               { src: "media/initiatives/sonic-inclusion/sc/vol1-piano.jpg", caption: "Volume I · Studio db, Berlin" },
               { src: "media/initiatives/sonic-inclusion/sc/vol1-light.jpg", caption: "Volume I · Studio db, Berlin" },
               { src: "media/initiatives/sonic-inclusion/sc/vol1-shadows.jpg", caption: "Volume I · Studio db, Berlin" },

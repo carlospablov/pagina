@@ -423,6 +423,11 @@ body.no-intro .tile { animation: none; opacity: 1; }
 .work__prog-what i { font-style: normal; color: #6f6f6f; font-size: 13px; }
 
 /* ---------- Carousel ---------- */
+.festfilm { margin: 0 0 calc(var(--pad) * 3); border-top: 1px solid var(--ink); padding-top: .9rem; }
+.festfilm .release__label { margin: 0 0 1rem; }
+.festfilm__fig { margin: 0; }
+.festfilm__fig video { display: block; width: 100%; max-width: calc(82vh * 4 / 3); aspect-ratio: 4 / 3; background: #000; }
+.festfilm__fig figcaption { margin-top: .5rem; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: #8a8a8a; }
 .carousel { margin: 0 0 calc(var(--pad) * 4); border-top: 1px solid var(--ink); padding-top: .9rem; }
 .carousel__head { display: flex; align-items: baseline; gap: 1.4rem; margin-bottom: 1rem; }
 .carousel__head .release__label { margin: 0; }
@@ -433,12 +438,12 @@ body.no-intro .tile { animation: none; opacity: 1; }
   scrollbar-width: none; outline: none; padding-bottom: 2px;
 }
 .carousel__track::-webkit-scrollbar { display: none; }
-.carousel__slide { flex: 0 0 min(72%, 980px); scroll-snap-align: start; margin: 0; }
+.carousel__slide { flex: 0 0 min(42%, 600px); scroll-snap-align: start; margin: 0; }
 .carousel__slide img, .carousel__slide video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #000; }
 .carousel__slide img { cursor: zoom-in; }
 .carousel__slide figcaption { margin-top: .5rem; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: #8a8a8a; }
 @media (max-width: 900px) {
-  .carousel__slide { flex-basis: 88%; }
+  .carousel__slide { flex-basis: 82%; }
   .carousel__head { flex-wrap: wrap; gap: .4rem 1rem; }
   .carousel__head .release__label { flex-basis: 100%; }
   .carousel__count { margin-left: 0; margin-right: auto; }
