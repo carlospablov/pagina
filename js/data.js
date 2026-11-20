@@ -368,7 +368,8 @@ window.SITE = {
               { title: "Volume I — Electronic ambient concert", people: "Croatian Amor, Nexcyia, Mu_tate, Carlos Villamizar, Èvia", place: "Studio db, Berlin", date: "21.02.2026" },
               { title: "Volume II — Electroacoustic concert", people: "Mazen Kerbaj, Gibrana Cervantes", place: "Morphine Raum, Berlin", date: "12.03.2026" },
               { title: "Volume III — Installation", people: "Interspecifics (Leslie García, Paloma López)", place: "New Fears Gallery, Berlin", date: "17.04.2026" }
-            ]
+            ],
+            support: "Signal Cultures is supported by Musikfonds e.V. with funds from the Federal Government Commissioner for Culture and the Media."
           }
         }
       ]

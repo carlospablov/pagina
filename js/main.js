@@ -441,6 +441,7 @@
               <ol class="work__prog-list">${it.programme.events.map((ev) => `
                 <li><span class="work__prog-date">${esc(ev.date)}</span><span class="work__prog-what"><b>${esc(ev.title)}</b><em>${esc(ev.people)}</em><i>${esc(ev.place)}</i></span></li>`).join("")}
               </ol>
+              ${it.programme.support ? `<p class="work__note work__support">${esc(it.programme.support)}</p>` : ""}
             </div>` : ""}
           ${it.tools ? `<p class="release__meta work__tools">TOOLS · ${esc(it.tools.toUpperCase())}</p>` : ""}
           ${it.specs ? `<p class="release__meta work__tools">WORK · ${esc(it.specs.toUpperCase())}</p>` : ""}
