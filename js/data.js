@@ -296,6 +296,27 @@ window.SITE = {
       ]
     },
     {
+      id: "about", title: "About", items: [],
+      // Shown exactly as written: one entry per line.
+      text: [
+        "CARLOS VILLAMIZAR",
+        "Geboren / Born in Bogotá-Colombia",
+        "Lebt seit / lives since 1989",
+        "Musiker, Audioproduzent und Klangkünstler / Musician, Sound Producer and Sound Artist",
+        "in Deutschland-Berlin / in Germany-Berlin",
+        "seit / since 2014",
+        "-Worksbasedontemporalandspatialmannersrelatedtosound."
+      ]
+    },
+    {
+      id: "contact", title: "Contact", items: [],
+      // Contact form. Messages are forwarded to this address by FormSubmit
+      // (formsubmit.co). The first message triggers an activation email that
+      // must be confirmed once. After that, FormSubmit offers a random alias:
+      // put it here instead of the address to keep the email out of the page.
+      form: { to: "sonicinclusion@gmail.com" }
+    },
+    {
       id: "initiatives", title: "Initiatives",
       items: [
         {
@@ -335,27 +356,6 @@ window.SITE = {
           }
         }
       ]
-    },
-    {
-      id: "about", title: "About", items: [],
-      // Shown exactly as written: one entry per line.
-      text: [
-        "CARLOS VILLAMIZAR",
-        "Geboren / Born in Bogotá-Colombia",
-        "Lebt seit / lives since 1989",
-        "Musiker, Audioproduzent und Klangkünstler / Musician, Sound Producer and Sound Artist",
-        "in Deutschland-Berlin / in Germany-Berlin",
-        "seit / since 2014",
-        "-Worksbasedontemporalandspatialmannersrelatedtosound."
-      ]
-    },
-    {
-      id: "contact", title: "Contact", items: [],
-      // Contact form. Messages are forwarded to this address by FormSubmit
-      // (formsubmit.co). The first message triggers an activation email that
-      // must be confirmed once. After that, FormSubmit offers a random alias:
-      // put it here instead of the address to keep the email out of the page.
-      form: { to: "sonicinclusion@gmail.com" }
     }
   ],
 
