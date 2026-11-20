@@ -36,7 +36,7 @@ window.SITE = {
   },
 
   // Show the "Hi!" box on first visit
-  greeting: true,
+  greeting: false,
 
   sections: [
     {
